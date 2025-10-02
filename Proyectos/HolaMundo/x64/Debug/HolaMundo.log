@@ -1,0 +1,5 @@
+﻿  HolaMundo.cpp
+C:\Users\Estudiante\Documents\Alejandra\ComputoGrafico\Proyectos\HolaMundo\HolaMundo.cpp(4,1): warning C4326: el tipo de valor devuelto de 'main' debe ser 'int' en lugar de 'void'
+  HolaMundo.vcxproj -> C:\Users\Estudiante\Documents\Alejandra\ComputoGrafico\Proyectos\x64\Debug\HolaMundo.exe
+  "pwsh.exe" no se reconoce como un comando interno o externo,
+  programa o archivo por lotes ejecutable.
