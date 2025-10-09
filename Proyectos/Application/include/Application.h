@@ -3,6 +3,11 @@
 #include <map>
 #include <glad.h>
 
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <string>
+
 class Application
 {
 
@@ -21,4 +26,8 @@ public:
 	void setup();
 	void update();
 	void draw();
+	void setUpGeometry();
+	void setUpProgram();
+
+	std::string fileToString(const std::string& filename);
 };

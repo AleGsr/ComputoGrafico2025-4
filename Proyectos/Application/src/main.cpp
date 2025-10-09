@@ -31,6 +31,7 @@ int main(void)
 
 
     app.setup();
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
@@ -46,6 +47,9 @@ int main(void)
         app.update();
 
         app.draw();
+
+        /*Swap front and back buffers*/
+        glfwSwapBuffers(window);
     }
 
     glfwTerminate();
