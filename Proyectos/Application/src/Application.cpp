@@ -13,6 +13,7 @@ void Application::setup()
 
 void Application::update() 
 {
+	time += 0.001f;
 	//std::cout << "update()" << std::endl;
 }
 
@@ -22,12 +23,13 @@ void Application::draw()
 	glUseProgram(ids["program"]);
 
 	//Pasar el resto de los parametros para el programa
+	glUniform1f(ids["time"], time);
 
 	//Seleccionar la geometria (el triangulo)
 	glBindVertexArray(ids["triangle"]);
 
 	//glDraw()
-	glDrawArrays(GL_TRIANGLES, 0, 3);
+	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
 	//std::cout << "draw()" << std::endl;
 }
@@ -36,6 +38,21 @@ void Application::draw()
 
 void Application::setUpGeometry()
 {
+
+	std::vector<float> geometry
+	{  //  X     Y     Z      W
+		-1.0f, -1.0f, 0.0f, 1.0f, //Vectice 2
+		-1.0f, 1.0f,  0.0f, 1.0f, //Vectice 1
+		1.0f,  -1.0f, 0.0f, 1.0f, //Vectice 3
+		1.0f,  1.0f,  0.0f, 1.0f, //vertice 4
+
+		1.0f , 0.0f,  0.0f, 1.0f, //rojo
+		0.0f , 1.0f,  0.0f, 1.0f, //verde
+		0.0f , 0.0f,  1.0f, 1.0f, //azul
+		0.0f , 1.0f,  0.0f, 1.0f, //verde
+	};
+
+
 	//Crear VAO
 	GLuint VAO, VBO; //Cajota, canicas
 	glGenVertexArrays(1, &VAO);
@@ -58,8 +75,13 @@ void Application::setUpGeometry()
 		&geometry[0],
 		GL_STATIC_DRAW);  //Mandamos la geometria al buffer
 
-	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, 0);
+	//vertices
+	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0,0);
 	glEnableVertexAttribArray(0);
+
+	//Colores
+	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0, (const void*)(12*sizeof(float)));
+	glEnableVertexAttribArray(1);
 
 }
 
@@ -69,6 +91,7 @@ void Application::setUpProgram()
 	std::string FragmentShader = fileToString("Shaders/FragmentShader.glsl");
 	std::string VertexShader = fileToString("Shaders/VertexShader.glsl");
 	ids["program"] = InitializeProgram(VertexShader, FragmentShader);
+	ids["time"] = glGetUniformLocation(ids["program"], "time");
 }
 
 std::string Application::fileToString(const std::string& filename)
