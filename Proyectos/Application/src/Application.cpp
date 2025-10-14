@@ -6,24 +6,35 @@
 void Application::setup() 
 {
 	setUpGeometry();
-	setUpProgram();
+	setUpProgram1();
+	setUpProgram2();
+	projection = glm::perspective(45.0f, 1024.0f / 768.f, 0.1f, 100.0f);
 
 	//std::cout <<"setup()" << std::endl;
 }
 
 void Application::update() 
 {
-	time += 0.001f;
-	//std::cout << "update()" << std::endl;
+	//time += 0.001f;
+
+	move += 0.1f* direction;
+	eye = glm:: vec3(0.0f, 0.0f, 2.0f + cos(time));
+
+	camera = glm::lookAt(eye, center, glm::vec3(0.0f, 1.0f, 0.0f));
+	//std::cout << move <<" , " << direction << std::endl;
 }
 
 void Application::draw() 
 {
 	//Seleccionar programa (shaders)
-	glUseProgram(ids["program"]);
+	glUseProgram(ids["program2"]);
 
 	//Pasar el resto de los parametros para el programa
-	glUniform1f(ids["time"], time);
+	//glUniform1f(ids["time2"], time);
+	glUniform1f(ids["move2"], move);
+
+	glUniformMatrix4fv(ids["camera"], 1,GL_FALSE, & camera[0][0]);
+	glUniformMatrix4fv(ids["projection"], 1,GL_FALSE, & projection[0][0]);
 
 	//Seleccionar la geometria (el triangulo)
 	glBindVertexArray(ids["triangle"]);
@@ -86,12 +97,24 @@ void Application::setUpGeometry()
 }
 
 
-void Application::setUpProgram()
+void Application::setUpProgram1()
 {
-	std::string FragmentShader = fileToString("Shaders/FragmentShader.glsl");
 	std::string VertexShader = fileToString("Shaders/VertexShader.glsl");
-	ids["program"] = InitializeProgram(VertexShader, FragmentShader);
-	ids["time"] = glGetUniformLocation(ids["program"], "time");
+	std::string FragmentShader = fileToString("Shaders/FragmentShader.glsl");
+	ids["program1"] = InitializeProgram(VertexShader, FragmentShader);
+	//ids["time1"] = glGetUniformLocation(ids["program1"], "time");
+	ids["move1"] = glGetUniformLocation(ids["program1"], "move");
+}
+
+void Application::setUpProgram2()
+{
+	std::string VertexShader = fileToString("Shaders/VertexCamera.glsl");
+	std::string FragmentShader = fileToString("Shaders/FragmentShader.glsl");
+	ids["program2"] = InitializeProgram(VertexShader, FragmentShader);
+	//ids["time2"] = glGetUniformLocation(ids["program2"], "time");
+	ids["move2"] = glGetUniformLocation(ids["program2"], "move");
+	ids["camera"] = glGetUniformLocation(ids["program2"], "camera");
+	ids["projection"] = glGetUniformLocation(ids["program2"], "projection");
 }
 
 std::string Application::fileToString(const std::string& filename)
@@ -113,6 +136,24 @@ std::string Application::fileToString(const std::string& filename)
 	file.close(); //Cierra el archivo
 
 	return buffer.str();  //Retorna el archivo resultante
+}
+
+void Application::keyCallback(int key, int scancode, int action, int mods)
+{
+	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+	glfwSetWindowShouldClose(window, true);
+
+	//teclas para mover
+	if (key == GLFW_KEY_A && action == GLFW_RELEASE)
+		SwapDirection();
+
+	if (key == GLFW_KEY_D && action == GLFW_PRESS)
+		SwapDirection();
+}
+
+void Application::SwapDirection()
+{
+	direction *=-1.0f ;
 }
 
 

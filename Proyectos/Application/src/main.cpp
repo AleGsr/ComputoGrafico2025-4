@@ -2,25 +2,33 @@
 #include "GLFW/glfw3.h"
 #include "Application.h"
 
+Application app;
+
+
+void CallBack(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+    app.keyCallback(key, scancode, action, mods);
+    /*if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+        glfwSetWindowShouldClose(window, true);*/
+}
+
 int main(void)
 {
-    GLFWwindow* window;
-    Application app;
 
     /* Initialize the library */
     if (!glfwInit())
         return -1;
 
     /* Create a windowed mode window and its OpenGL context */
-    window = glfwCreateWindow(1024, 768, "Hello Application", NULL, NULL);
-    if (!window)
+    app.window = glfwCreateWindow(1024, 768, "Hello Application", NULL, NULL);
+    if (!app.window)
     {
         glfwTerminate();
         return -1;
     }
 
     /* Make the window's context current */
-    glfwMakeContextCurrent(window);
+    glfwMakeContextCurrent(app.window);
 
 
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
@@ -31,10 +39,13 @@ int main(void)
 
 
     app.setup();
+
+    glfwSetKeyCallback(app.window, CallBack);
+
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
     /* Loop until the user closes the window */
-    while (!glfwWindowShouldClose(window))
+    while (!glfwWindowShouldClose(app.window))
     {
         /* Render here */
         glClear(GL_COLOR_BUFFER_BIT);
@@ -49,7 +60,7 @@ int main(void)
         app.draw();
 
         /*Swap front and back buffers*/
-        glfwSwapBuffers(window);
+        glfwSwapBuffers(app.window);
     }
 
     glfwTerminate();
