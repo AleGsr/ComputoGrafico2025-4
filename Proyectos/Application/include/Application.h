@@ -21,6 +21,8 @@ private:
 	float time{ 0.0f };
 	float move{ 0.0f };
 	void setUpGeometry();
+	void setUpCube();
+
 	void setUpProgram1();
 	void setUpProgram2();
 
