@@ -289,6 +289,19 @@ void Application::keyCallback(int key, int scancode, int action, int mods)
 		SwapDirection();
 }
 
+void Application::mouseCallback(double xpos, double ypos)
+{
+	glfwGetCursorPos(window, &xpos, &ypos); //Obtiene la posición del mouse
+	std::cout << "Xpos: "<< xpos << " , " << "YPos:" << ypos << std::endl;
+}
+
+void Application::rotateCube() //Va a ocupar la posicion del mouse que se obtenga en el mouseCallBack
+{
+	//Matriz en X y Y
+	//Cada que el mouse se mueve se realiza la matriz de transformación
+	//
+}
+
 void Application::SwapDirection()
 {
 	direction *= -1.0f;

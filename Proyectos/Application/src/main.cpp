@@ -5,11 +5,16 @@
 Application app;
 
 
-void CallBack(GLFWwindow* window, int key, int scancode, int action, int mods)
+void KeyCallBack(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
     app.keyCallback(key, scancode, action, mods);
     /*if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);*/
+}
+
+void MouseCallBack(GLFWwindow* window, double xpos, double ypos)
+{
+    app.mouseCallback(xpos, ypos);
 }
 
 int main(void)
@@ -40,7 +45,9 @@ int main(void)
 
     app.setup();
 
-    glfwSetKeyCallback(app.window, CallBack);
+    glfwSetKeyCallback(app.window, KeyCallBack);
+    glfwSetCursorPosCallback(app.window, MouseCallBack);
+    //Mouse
 
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 

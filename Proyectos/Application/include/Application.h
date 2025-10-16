@@ -45,5 +45,7 @@ public:
 	std::string fileToString(const std::string& filename);
 
 	void keyCallback(int key, int scancode, int action, int mods);
+	void mouseCallback(double xpos, double ypos); //Regresa la posición del mouse
+	void rotateCube(); //Contiene las matrices
 	void SwapDirection();
 };
