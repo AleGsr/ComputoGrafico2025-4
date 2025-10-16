@@ -13,18 +13,28 @@ void Application::setup()
 	setUpProgram2();
 	projection = glm::perspective(45.0f, 1024.0f / 768.f, 0.1f, 100.0f);
 
+	glEnable(GL_DEPTH_TEST);
+
 	//std::cout <<"setup()" << std::endl;
 }
 
 void Application::update()
 {
-	//time += 0.001f;
+	time += 0.1f;
 
 	move += 0.1f * direction;
-	eye = glm::vec3(0.0f, 0.0f, 2.0f + cos(time));
+	center = glm::vec3(0.0f, 0.0f, 0.0f);
+	//eye = glm::vec3(-2.0f + cos(time), 1.0f + sin(time), 2.0f + cos(time));
+	eye = glm::vec3(2.0f , 2.0f , 2.0f);
 
 	camera = glm::lookAt(eye, center, glm::vec3(0.0f, 1.0f, 0.0f));
 	//std::cout << move <<" , " << direction << std::endl;
+
+	glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(1.0f, 1.0f, 1.0f));
+	glm::mat4 translate = glm::translate(glm::mat4(1.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+	glm::mat4 rotateX = glm::rotate(glm::mat4(1.0f), glm::radians(time), glm::vec3(1.0f, 0.0f, 0.0f));
+
+	model = rotateX * translate * scale;
 }
 
 void Application::draw()
@@ -36,6 +46,7 @@ void Application::draw()
 	//glUniform1f(ids["time2"], time);
 	glUniform1f(ids["move2"], move);
 
+	glUniformMatrix4fv(ids["model"], 1, GL_FALSE, &model[0][0]);
 	glUniformMatrix4fv(ids["camera"], 1, GL_FALSE, &camera[0][0]);
 	glUniformMatrix4fv(ids["projection"], 1, GL_FALSE, &projection[0][0]);
 
@@ -179,12 +190,12 @@ void Application::setUpCube()
 		  1.0f , 0.0f,  1.0f, 1.0f, //VAt6
 
 		//Cara Arriba Blanco
-		  1.0f , 1.0f,  1.0f, 1.0f, //VArr1
-		  1.0f , 1.0f,  1.0f, 1.0f, //VArr2
-		  1.0f , 1.0f,  1.0f, 1.0f, //VArr3
-		  1.0f , 1.0f,  1.0f, 1.0f, //VArr4
-		  1.0f , 1.0f,  1.0f, 1.0f, //VArr5
-		  1.0f , 1.0f,  1.0f, 1.0f, //VArr6		
+		  0.0f , 1.0f,  1.0f, 1.0f, //VArr1
+		  0.0f , 1.0f,  1.0f, 1.0f, //VArr2
+		  0.0f , 1.0f,  1.0f, 1.0f, //VArr3
+		  0.0f , 1.0f,  1.0f, 1.0f, //VArr4
+		  0.0f , 1.0f,  1.0f, 1.0f, //VArr5
+		  0.0f , 1.0f,  1.0f, 1.0f, //VArr6		
 
 		//Cara Abajo Amarillo
 		  1.0f , 1.0f,  0.0f, 1.0f, //VAb1
@@ -238,7 +249,7 @@ void Application::setUpCube()
 	glEnableVertexAttribArray(0);
 
 	//Colores
-	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0, (const void*)((36*6) * sizeof(float)));
+	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0, (const void*)((24*6) * sizeof(float)));
 	glEnableVertexAttribArray(1);
 }
 
@@ -261,6 +272,26 @@ void Application::setUpProgram2()
 	ids["move2"] = glGetUniformLocation(ids["program2"], "move");
 	ids["camera"] = glGetUniformLocation(ids["program2"], "camera");
 	ids["projection"] = glGetUniformLocation(ids["program2"], "projection");
+	ids["model"] = glGetUniformLocation(ids["program2"], "model");
+}
+
+
+void Application::keyCallback(int key, int scancode, int action, int mods)
+{
+	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+		glfwSetWindowShouldClose(window, true);
+
+	//teclas para mover
+	if (key == GLFW_KEY_A && action == GLFW_RELEASE)
+		SwapDirection();
+
+	if (key == GLFW_KEY_D && action == GLFW_PRESS)
+		SwapDirection();
+}
+
+void Application::SwapDirection()
+{
+	direction *= -1.0f;
 }
 
 std::string Application::fileToString(const std::string& filename)
@@ -283,23 +314,4 @@ std::string Application::fileToString(const std::string& filename)
 
 	return buffer.str();  //Retorna el archivo resultante
 }
-
-void Application::keyCallback(int key, int scancode, int action, int mods)
-{
-	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
-		glfwSetWindowShouldClose(window, true);
-
-	//teclas para mover
-	if (key == GLFW_KEY_A && action == GLFW_RELEASE)
-		SwapDirection();
-
-	if (key == GLFW_KEY_D && action == GLFW_PRESS)
-		SwapDirection();
-}
-
-void Application::SwapDirection()
-{
-	direction *= -1.0f;
-}
-
 

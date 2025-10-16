@@ -28,6 +28,7 @@ private:
 
 	glm::mat4 camera;
 	glm::mat4 projection;
+	glm::mat4 model;
 	glm::vec3 eye{0.0f,0.0f,2.0f};
 	glm::vec3 center{1.0f,1.0f,0.5f};
 
