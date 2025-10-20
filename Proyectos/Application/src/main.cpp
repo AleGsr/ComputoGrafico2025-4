@@ -17,6 +17,11 @@ void MouseCallBack(GLFWwindow* window, double xpos, double ypos)
     app.mouseCallback(xpos, ypos);
 }
 
+void ScrollCallBack(GLFWwindow* window, double xoffset, double yoffset)
+{
+    app.scrollCallback(xoffset, yoffset);
+}
+
 int main(void)
 {
 
@@ -47,6 +52,7 @@ int main(void)
 
     glfwSetKeyCallback(app.window, KeyCallBack);
     glfwSetCursorPosCallback(app.window, MouseCallBack);
+    glfwSetScrollCallback(app.window, ScrollCallBack);
     //Mouse
 
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);

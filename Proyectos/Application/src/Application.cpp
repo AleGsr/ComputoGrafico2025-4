@@ -30,11 +30,11 @@ void Application::update()
 	camera = glm::lookAt(eye, center, glm::vec3(0.0f, 1.0f, 0.0f));
 	//std::cout << move <<" , " << direction << std::endl;
 
-	glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(1.0f, 1.0f, 1.0f));
-	glm::mat4 translate = glm::translate(glm::mat4(1.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-	glm::mat4 rotateX = glm::rotate(glm::mat4(1.0f), glm::radians(time), glm::vec3(1.0f, 0.0f, 0.0f));
+	//glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(1.0f, 1.0f, 1.0f));
+	//glm::mat4 translate = glm::translate(glm::mat4(1.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+	//glm::mat4 rotateX = glm::rotate(glm::mat4(1.0f), glm::radians(time), glm::vec3(1.0f, 0.0f, 0.0f));
 
-	model = rotateX * translate * scale;
+	//model = rotateX * translate * scale;
 }
 
 void Application::draw()
@@ -292,7 +292,38 @@ void Application::keyCallback(int key, int scancode, int action, int mods)
 void Application::mouseCallback(double xpos, double ypos)
 {
 	glfwGetCursorPos(window, &xpos, &ypos); //Obtiene la posición del mouse
-	std::cout << "Xpos: "<< xpos << " , " << "YPos:" << ypos << std::endl;
+
+	//Convertimos los angulos
+	moveHorizontal += (xpos - lastmoveX) * 0.2;
+	moveVertical += (ypos - lastmoveY) * 0.2;
+
+	lastmoveX = xpos;
+	lastmoveY = ypos;
+
+
+	glm::mat4 rotationX = glm::rotate(glm::mat4(1.0), glm::radians(moveVertical), glm::vec3(1.0f, 0.0f, 0.0f));
+	glm::mat4 rotationY = glm::rotate(glm::mat4(1.0), glm::radians(moveHorizontal), glm::vec3(0.0f, 1.0f, 0.0f));
+	model = rotationY * rotationX;
+	//std::cout << "Xpos: "<< xpos << " , " << "YPos:" << ypos << std::endl;
+}
+
+
+void Application::scrollCallback(double xoffset, double yoffset)
+{
+	scale += yoffset; //Se modifica la escala segun el scroll
+	
+	if (scale < minScale)
+	{
+		scale = minScale;
+	}
+	if (scale > maxScale)
+	{
+		scale = maxScale;
+	}
+	//glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(scale));
+	//model = rotationY * rotationX * scale;
+
+	//std::cout << "Xoffset: " << xoffset << " , " << "Yoffset:" << yoffset << std::endl;
 }
 
 void Application::rotateCube() //Va a ocupar la posicion del mouse que se obtenga en el mouseCallBack
