@@ -40,19 +40,16 @@ public:
 
 	//Rotar 
 
-	float moveHorizontal; //cuanto rota en x
+	float moveHorizontal ; //cuanto rota en x
 	float moveVertical;  //cuanto rota en y
 
-	//Ultima posición antes de volver a mover
-	float lastmoveX; 
-	float lastmoveY;
 
 
 
 	//Escalar
-	float scale = 1.0f;
+	float zoom = 0.7f;
 	float minScale = 0.5f;
-	float maxScale = 10.0f;
+	float maxScale = 5.0f;
 
 
 	void setup();
@@ -64,6 +61,5 @@ public:
 	void keyCallback(int key, int scancode, int action, int mods);
 	void mouseCallback(double xpos, double ypos); //Regresa la posición del mouse
 	void scrollCallback(double xoffset, double yoffset); //Regresa el valor del scroll
-	void rotateCube(); //Contiene las matrices
 	void SwapDirection();
 };

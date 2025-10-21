@@ -23,9 +23,9 @@ void Application::update()
 	time += 0.1f;
 
 	move += 0.1f * direction;
-	center = glm::vec3(0.0f, 0.0f, 0.0f);
+	center = glm::vec3(0.01f, 0.01f, 0.01f);
 	//eye = glm::vec3(-2.0f + cos(time), 1.0f + sin(time), 2.0f + cos(time));
-	eye = glm::vec3(2.0f , 2.0f , 2.0f);
+	eye = glm::vec3(0.0f , 0.0f , 3.0f);
 
 	camera = glm::lookAt(eye, center, glm::vec3(0.0f, 1.0f, 0.0f));
 	//std::cout << move <<" , " << direction << std::endl;
@@ -34,12 +34,17 @@ void Application::update()
 	//glm::mat4 translate = glm::translate(glm::mat4(1.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 	//glm::mat4 rotateX = glm::rotate(glm::mat4(1.0f), glm::radians(time), glm::vec3(1.0f, 0.0f, 0.0f));
 
-	//model = rotateX * translate * scale;
+	glm::mat4 rotationX = glm::rotate(glm::mat4(1.0), glm::radians(moveVertical), glm::vec3(1.0f, 0.0f, 0.0f));
+	glm::mat4 rotationY = glm::rotate(glm::mat4(1.0), glm::radians(moveHorizontal), glm::vec3(0.0f, 1.0f, 0.0f));
+	glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3((1.0f, 1.0f, 1.0f) * zoom));
+
+	model = rotationX* rotationY * scale;
 }
 
 void Application::draw()
 {
 	//Seleccionar programa (shaders)
+
 	glUseProgram(ids["program2"]);
 
 	//Pasar el resto de los parametros para el programa
@@ -50,9 +55,13 @@ void Application::draw()
 	glUniformMatrix4fv(ids["camera"], 1, GL_FALSE, &camera[0][0]);
 	glUniformMatrix4fv(ids["projection"], 1, GL_FALSE, &projection[0][0]);
 
+
+
 	//Seleccionar la geometria (el triangulo)
 	//glBindVertexArray(ids["triangle"]);
 	glBindVertexArray(ids["cube"]);
+
+
 
 	//glDraw()
 	//glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
@@ -294,44 +303,34 @@ void Application::mouseCallback(double xpos, double ypos)
 	glfwGetCursorPos(window, &xpos, &ypos); //Obtiene la posición del mouse
 
 	//Convertimos los angulos
-	moveHorizontal += (xpos - lastmoveX) * 0.2;
-	moveVertical += (ypos - lastmoveY) * 0.2;
-
-	lastmoveX = xpos;
-	lastmoveY = ypos;
+	moveHorizontal = (xpos * 0.2) ;
+	moveVertical = (ypos * 0.2);
 
 
 	glm::mat4 rotationX = glm::rotate(glm::mat4(1.0), glm::radians(moveVertical), glm::vec3(1.0f, 0.0f, 0.0f));
 	glm::mat4 rotationY = glm::rotate(glm::mat4(1.0), glm::radians(moveHorizontal), glm::vec3(0.0f, 1.0f, 0.0f));
-	model = rotationY * rotationX;
 	//std::cout << "Xpos: "<< xpos << " , " << "YPos:" << ypos << std::endl;
 }
 
 
 void Application::scrollCallback(double xoffset, double yoffset)
 {
-	scale += yoffset; //Se modifica la escala segun el scroll
+	zoom += yoffset/4.0f; //Se modifica la escala segun el scroll :)
 	
-	if (scale < minScale)
+	if (zoom < minScale)
 	{
-		scale = minScale;
+		zoom = minScale;
 	}
-	if (scale > maxScale)
+	if (zoom > maxScale)
 	{
-		scale = maxScale;
+		zoom = maxScale;
 	}
-	//glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(scale));
-	//model = rotationY * rotationX * scale;
+	glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3((1.0f,1.0f,1.0f)*zoom));
+
 
 	//std::cout << "Xoffset: " << xoffset << " , " << "Yoffset:" << yoffset << std::endl;
 }
 
-void Application::rotateCube() //Va a ocupar la posicion del mouse que se obtenga en el mouseCallBack
-{
-	//Matriz en X y Y
-	//Cada que el mouse se mueve se realiza la matriz de transformación
-	//
-}
 
 void Application::SwapDirection()
 {
