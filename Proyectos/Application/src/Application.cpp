@@ -45,7 +45,9 @@ void Application::draw()
 {
 	//Seleccionar programa (shaders)
 
-	glUseProgram(ids["program2"]);
+	//se ocupa el current program--
+	//glUseProgram(ids["program1"]); //P1
+	glUseProgram(ids["program2"]); //P2
 
 	//Pasar el resto de los parametros para el programa
 	//glUniform1f(ids["time2"], time);
@@ -58,14 +60,15 @@ void Application::draw()
 
 
 	//Seleccionar la geometria (el triangulo)
-	//glBindVertexArray(ids["triangle"]);
-	glBindVertexArray(ids["cube"]);
-
+	//se ocupa el current shader--
+	//glBindVertexArray(ids["triangle"]); //Triangle
+	glBindVertexArray(ids["cube"]);   //Cube
 
 
 	//glDraw()
-	//glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-	glDrawArrays(GL_TRIANGLES, 0, 36);
+	//glDrawArrays(GL_TRIANGLE_STRIP, 0, 4); //Triangle
+	glDrawArrays(GL_TRIANGLES, 0, 36);    //Cube
+
 
 	//std::cout << "draw()" << std::endl;
 }
@@ -296,6 +299,33 @@ void Application::keyCallback(int key, int scancode, int action, int mods)
 
 	if (key == GLFW_KEY_D && action == GLFW_PRESS)
 		SwapDirection();
+
+
+
+	if (key == GLFW_KEY_P && action == GLFW_PRESS)
+	{
+		//Arreglo donde va cambiando el programa recorriendo cada uno de ellos
+		switch (key == GLFW_KEY_P && action == GLFW_PRESS)
+		{
+		case 1:
+			currentProgram = 1.0f;
+
+		case 2:
+			currentProgram = 2.0f;
+
+
+		}
+		
+	}
+
+	if (key == GLFW_KEY_S && action == GLFW_PRESS)
+	{
+		//Arreglo donde va cambiando el shader recorriendo cada uno de ellos
+	}
+
+
+	
+
 }
 
 void Application::mouseCallback(double xpos, double ypos)
@@ -357,4 +387,6 @@ std::string Application::fileToString(const std::string& filename)
 
 	return buffer.str();  //Retorna el archivo resultante
 }
+
+
 

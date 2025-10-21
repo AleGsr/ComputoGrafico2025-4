@@ -37,7 +37,7 @@
       "VerticalTabListWidth": 256,
       "DocumentGroups": [
         {
-          "DockedWidth": 228,
+          "DockedWidth": 350,
           "SelectedChildIndex": 0,
           "Children": [
             {
@@ -56,7 +56,7 @@
           ]
         },
         {
-          "DockedWidth": 266,
+          "DockedWidth": 432,
           "SelectedChildIndex": 0,
           "Children": [
             {
@@ -67,7 +67,7 @@
               "RelativeDocumentMoniker": "Application\\include\\Application.h",
               "ToolTip": "C:\\Users\\Estudiante\\Documents\\Alejandra\\ComputoGrafico2025-4\\Proyectos\\Application\\include\\Application.h",
               "RelativeToolTip": "Application\\include\\Application.h",
-              "ViewState": "AgIAACYAAAAAAAAAAAAIwDEAAAARAAAAAAAAAA==",
+              "ViewState": "AgIAACAAAAAAAAAAAAAIwDsAAAAUAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
               "WhenOpened": "2025-10-06T23:25:13.191Z",
               "EditorCaption": ""
@@ -100,7 +100,7 @@
           ]
         },
         {
-          "DockedWidth": 713,
+          "DockedWidth": 425,
           "SelectedChildIndex": 0,
           "Children": [
             {
@@ -111,7 +111,7 @@
               "RelativeDocumentMoniker": "Application\\src\\Application.cpp",
               "ToolTip": "C:\\Users\\Estudiante\\Documents\\Alejandra\\ComputoGrafico2025-4\\Proyectos\\Application\\src\\Application.cpp",
               "RelativeToolTip": "Application\\src\\Application.cpp",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAHsAAAAdAAAAAAAAAA==",
+              "ViewState": "AgIAAC4AAAAAAAAAAAAAADAAAAADAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2025-10-06T23:26:40.685Z",
               "EditorCaption": ""

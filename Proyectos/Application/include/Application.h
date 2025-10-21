@@ -56,10 +56,17 @@ public:
 	void update();
 	void draw();
 
+	float currentProgram;
+	float currentShader;
+	
+
 	std::string fileToString(const std::string& filename);
+
 
 	void keyCallback(int key, int scancode, int action, int mods);
 	void mouseCallback(double xpos, double ypos); //Regresa la posición del mouse
 	void scrollCallback(double xoffset, double yoffset); //Regresa el valor del scroll
 	void SwapDirection();
+
+
 };
