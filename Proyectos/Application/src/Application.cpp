@@ -5,14 +5,13 @@
 
 void Application::setup()
 {
-	//setUpGeometry();
-
+	setUpGeometry();
 	setUpCube();
 
 	setUpProgram1();
 	setUpProgram2();
-	projection = glm::perspective(45.0f, 1024.0f / 768.f, 0.1f, 100.0f);
 
+	projection = glm::perspective(45.0f, 1024.0f / 768.f, 0.1f, 100.0f);
 	glEnable(GL_DEPTH_TEST);
 
 	//std::cout <<"setup()" << std::endl;
@@ -43,33 +42,48 @@ void Application::update()
 
 void Application::draw()
 {
+
 	//Seleccionar programa (shaders)
 
-	//se ocupa el current program--
-	//glUseProgram(ids["program1"]); //P1
-	glUseProgram(ids["program2"]); //P2
+	if (currentProgram == 1)
+	{
+		glUseProgram(ids["program1"]); //P1
+		glUniform1f(ids["move1"], move);
+	}
+	else
+	{
+		glUseProgram(ids["program2"]); //P2
+		glUniform1f(ids["move2"], move);
+		glUniformMatrix4fv(ids["model"], 1, GL_FALSE, &model[0][0]);
+		glUniformMatrix4fv(ids["camera"], 1, GL_FALSE, &camera[0][0]);
+		glUniformMatrix4fv(ids["projection"], 1, GL_FALSE, &projection[0][0]);
+	}
+	
+	
 
 	//Pasar el resto de los parametros para el programa
 	//glUniform1f(ids["time2"], time);
-	glUniform1f(ids["move2"], move);
+	
+	
 
-	glUniformMatrix4fv(ids["model"], 1, GL_FALSE, &model[0][0]);
-	glUniformMatrix4fv(ids["camera"], 1, GL_FALSE, &camera[0][0]);
-	glUniformMatrix4fv(ids["projection"], 1, GL_FALSE, &projection[0][0]);
-
+	
 
 
-	//Seleccionar la geometria (el triangulo)
-	//se ocupa el current shader--
-	//glBindVertexArray(ids["triangle"]); //Triangle
-	glBindVertexArray(ids["cube"]);   //Cube
 
+	//Seleccionar la geometria 
+	if (currentGeometry == 1)
+	{
+		glBindVertexArray(ids["triangle"]); //Triangle
+		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4); //Triangle
+	}
+	else
+	{
+		glBindVertexArray(ids["cube"]);   //Cube
+		glDrawArrays(GL_TRIANGLES, 0, 36);    //Cube
+	}
+	
 
 	//glDraw()
-	//glDrawArrays(GL_TRIANGLE_STRIP, 0, 4); //Triangle
-	glDrawArrays(GL_TRIANGLES, 0, 36);    //Cube
-
-
 	//std::cout << "draw()" << std::endl;
 }
 
@@ -271,7 +285,7 @@ void Application::setUpProgram1()
 	std::string VertexShader = fileToString("Shaders/VertexShader.glsl");
 	std::string FragmentShader = fileToString("Shaders/FragmentShader.glsl");
 	ids["program1"] = InitializeProgram(VertexShader, FragmentShader);
-	//ids["time1"] = glGetUniformLocation(ids["program1"], "time");
+	ids["time1"] = glGetUniformLocation(ids["program1"], "time");
 	ids["move1"] = glGetUniformLocation(ids["program1"], "move");
 }
 
@@ -280,7 +294,7 @@ void Application::setUpProgram2()
 	std::string VertexShader = fileToString("Shaders/VertexCamera.glsl");
 	std::string FragmentShader = fileToString("Shaders/FragmentShader.glsl");
 	ids["program2"] = InitializeProgram(VertexShader, FragmentShader);
-	//ids["time2"] = glGetUniformLocation(ids["program2"], "time");
+	ids["time2"] = glGetUniformLocation(ids["program2"], "time");
 	ids["move2"] = glGetUniformLocation(ids["program2"], "move");
 	ids["camera"] = glGetUniformLocation(ids["program2"], "camera");
 	ids["projection"] = glGetUniformLocation(ids["program2"], "projection");
@@ -304,23 +318,14 @@ void Application::keyCallback(int key, int scancode, int action, int mods)
 
 	if (key == GLFW_KEY_P && action == GLFW_PRESS)
 	{
-		//Arreglo donde va cambiando el programa recorriendo cada uno de ellos
-		switch (key == GLFW_KEY_P && action == GLFW_PRESS)
-		{
-		case 1:
-			currentProgram = 1.0f;
-
-		case 2:
-			currentProgram = 2.0f;
-
-
-		}
-		
+		if (currentProgram== 1)currentProgram = 2;
+		else currentProgram = 1;
 	}
 
-	if (key == GLFW_KEY_S && action == GLFW_PRESS)
+	if (key == GLFW_KEY_G && action == GLFW_PRESS)
 	{
-		//Arreglo donde va cambiando el shader recorriendo cada uno de ellos
+		if (currentGeometry== 1) currentGeometry = 2;
+		else currentGeometry = 1;
 	}
 
 

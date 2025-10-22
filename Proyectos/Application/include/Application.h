@@ -56,8 +56,8 @@ public:
 	void update();
 	void draw();
 
-	float currentProgram;
-	float currentShader;
+	float currentProgram = 1;
+	float currentGeometry = 1;
 	
 
 	std::string fileToString(const std::string& filename);
