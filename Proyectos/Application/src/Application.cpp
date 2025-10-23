@@ -63,11 +63,6 @@ void Application::draw()
 
 	//Pasar el resto de los parametros para el programa
 	//glUniform1f(ids["time2"], time);
-	
-	
-
-	
-
 
 
 	//Seleccionar la geometria 
