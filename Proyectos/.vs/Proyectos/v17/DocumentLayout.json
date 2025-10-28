@@ -3,16 +3,36 @@
   "WorkspaceRootPath": "C:\\Users\\Estudiante\\Documents\\Alejandra\\ComputoGrafico2025-4\\Proyectos\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{63C767C1-2F86-4E6D-BF09-5C684BA9A217}|DirectX12Triangle\\DirectX12Triangle.vcxproj|C:\\Users\\Estudiante\\Documents\\Alejandra\\ComputoGrafico2025-4\\Proyectos\\DirectX12Triangle\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{63C767C1-2F86-4E6D-BF09-5C684BA9A217}|DirectX12Triangle\\DirectX12Triangle.vcxproj|solutionrelative:DirectX12Triangle\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{FCFFEC48-1A6E-460A-96EF-B341FFA57993}|DirectX_12\\DirectX_2.vcxproj|C:\\Users\\Estudiante\\Documents\\Alejandra\\ComputoGrafico2025-4\\Proyectos\\DirectX_12\\src\\Application.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{FCFFEC48-1A6E-460A-96EF-B341FFA57993}|DirectX_12\\DirectX_2.vcxproj|solutionrelative:DirectX_12\\src\\Application.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{FCFFEC48-1A6E-460A-96EF-B341FFA57993}|DirectX_12\\DirectX_2.vcxproj|C:\\Users\\Estudiante\\Documents\\Alejandra\\ComputoGrafico2025-4\\Proyectos\\DirectX_12\\src\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{FCFFEC48-1A6E-460A-96EF-B341FFA57993}|DirectX_12\\DirectX_2.vcxproj|solutionrelative:DirectX_12\\src\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+      "AbsoluteMoniker": "D:0:0:{09F71748-7F55-4345-AF68-25EBB3CB7941}|DirectXApplication\\DirectXApplication.vcxproj|C:\\Users\\Estudiante\\Documents\\Alejandra\\ComputoGrafico2025-4\\Proyectos\\DirectXApplication\\src\\Application12X.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{09F71748-7F55-4345-AF68-25EBB3CB7941}|DirectXApplication\\DirectXApplication.vcxproj|solutionrelative:DirectXApplication\\src\\Application12X.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{09F71748-7F55-4345-AF68-25EBB3CB7941}|DirectXApplication\\DirectXApplication.vcxproj|C:\\Users\\Estudiante\\Documents\\Alejandra\\ComputoGrafico2025-4\\Proyectos\\DirectXApplication\\src\\Application12X.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{09F71748-7F55-4345-AF68-25EBB3CB7941}|DirectXApplication\\DirectXApplication.vcxproj|solutionrelative:DirectXApplication\\src\\Application12X.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{09F71748-7F55-4345-AF68-25EBB3CB7941}|DirectXApplication\\DirectXApplication.vcxproj|C:\\Users\\Estudiante\\Documents\\Alejandra\\ComputoGrafico2025-4\\Proyectos\\DirectXApplication\\src\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{09F71748-7F55-4345-AF68-25EBB3CB7941}|DirectXApplication\\DirectXApplication.vcxproj|solutionrelative:DirectXApplication\\src\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C7AB1E14-92A7-49AA-995D-CCB4207A0A5A}|Application\\Application.vcxproj|C:\\Users\\Estudiante\\Documents\\Alejandra\\ComputoGrafico2025-4\\Proyectos\\Application\\src\\Application.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{C7AB1E14-92A7-49AA-995D-CCB4207A0A5A}|Application\\Application.vcxproj|solutionrelative:Application\\src\\Application.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{FCFFEC48-1A6E-460A-96EF-B341FFA57993}|DirectX_12\\DirectX_2.vcxproj|C:\\Users\\Estudiante\\Documents\\Alejandra\\ComputoGrafico2025-4\\Proyectos\\DirectX_12\\include\\Application.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{FCFFEC48-1A6E-460A-96EF-B341FFA57993}|DirectX_12\\DirectX_2.vcxproj|solutionrelative:DirectX_12\\include\\Application.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FCFFEC48-1A6E-460A-96EF-B341FFA57993}|DirectX_12\\DirectX_2.vcxproj|C:\\Users\\Estudiante\\Documents\\Alejandra\\ComputoGrafico2025-4\\Proyectos\\DirectX_12\\src\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{FCFFEC48-1A6E-460A-96EF-B341FFA57993}|DirectX_12\\DirectX_2.vcxproj|solutionrelative:DirectX_12\\src\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     }
   ],
   "DocumentGroupContainers": [
@@ -21,58 +41,123 @@
       "VerticalTabListWidth": 256,
       "DocumentGroups": [
         {
-          "DockedWidth": 388,
-          "SelectedChildIndex": 0,
+          "DockedWidth": 691,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "main.cpp",
-              "DocumentMoniker": "C:\\Users\\Estudiante\\Documents\\Alejandra\\ComputoGrafico2025-4\\Proyectos\\DirectX_12\\src\\main.cpp",
-              "RelativeDocumentMoniker": "DirectX_12\\src\\main.cpp",
-              "ToolTip": "C:\\Users\\Estudiante\\Documents\\Alejandra\\ComputoGrafico2025-4\\Proyectos\\DirectX_12\\src\\main.cpp",
-              "RelativeToolTip": "DirectX_12\\src\\main.cpp",
-              "ViewState": "AgIAABgAAAAAAAAAAAAAAC0AAAAZAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2025-10-23T01:37:13.82Z",
-              "EditorCaption": ""
-            }
-          ]
-        },
-        {
-          "DockedWidth": 631,
-          "SelectedChildIndex": 0,
-          "Children": [
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 6,
               "Title": "Application.h",
               "DocumentMoniker": "C:\\Users\\Estudiante\\Documents\\Alejandra\\ComputoGrafico2025-4\\Proyectos\\DirectX_12\\include\\Application.h",
               "RelativeDocumentMoniker": "DirectX_12\\include\\Application.h",
               "ToolTip": "C:\\Users\\Estudiante\\Documents\\Alejandra\\ComputoGrafico2025-4\\Proyectos\\DirectX_12\\include\\Application.h",
               "RelativeToolTip": "DirectX_12\\include\\Application.h",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAACQAAAAAAAAAAAAAADgAAABSAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2025-10-23T01:37:17.968Z",
+              "WhenOpened": "2025-10-28T00:56:47.122Z",
               "EditorCaption": ""
-            }
-          ]
-        },
-        {
-          "DockedWidth": 619,
-          "SelectedChildIndex": 0,
-          "Children": [
+            },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "Application.cpp",
               "DocumentMoniker": "C:\\Users\\Estudiante\\Documents\\Alejandra\\ComputoGrafico2025-4\\Proyectos\\DirectX_12\\src\\Application.cpp",
               "RelativeDocumentMoniker": "DirectX_12\\src\\Application.cpp",
               "ToolTip": "C:\\Users\\Estudiante\\Documents\\Alejandra\\ComputoGrafico2025-4\\Proyectos\\DirectX_12\\src\\Application.cpp",
               "RelativeToolTip": "DirectX_12\\src\\Application.cpp",
-              "ViewState": "AgIAALoAAAAAAAAAAAAAANsAAAAfAAAAAAAAAA==",
+              "ViewState": "AgIAAJMAAAAAAAAAAAAAAJ8AAAB6AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2025-10-23T01:37:08.107Z",
+              "WhenOpened": "2025-10-28T00:56:45.889Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "main.cpp",
+              "DocumentMoniker": "C:\\Users\\Estudiante\\Documents\\Alejandra\\ComputoGrafico2025-4\\Proyectos\\DirectX_12\\src\\main.cpp",
+              "RelativeDocumentMoniker": "DirectX_12\\src\\main.cpp",
+              "ToolTip": "C:\\Users\\Estudiante\\Documents\\Alejandra\\ComputoGrafico2025-4\\Proyectos\\DirectX_12\\src\\main.cpp",
+              "RelativeToolTip": "DirectX_12\\src\\main.cpp",
+              "ViewState": "AgIAAAwAAAAAAAAAAAAAADgAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2025-10-27T23:55:34.806Z",
+              "EditorCaption": ""
+            }
+          ]
+        },
+        {
+          "DockedWidth": 758,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "main.cpp",
+              "DocumentMoniker": "C:\\Users\\Estudiante\\Documents\\Alejandra\\ComputoGrafico2025-4\\Proyectos\\DirectX12Triangle\\main.cpp",
+              "RelativeDocumentMoniker": "DirectX12Triangle\\main.cpp",
+              "ToolTip": "C:\\Users\\Estudiante\\Documents\\Alejandra\\ComputoGrafico2025-4\\Proyectos\\DirectX12Triangle\\main.cpp",
+              "RelativeToolTip": "DirectX12Triangle\\main.cpp",
+              "ViewState": "AgIAABIBAAAAAAAAAAAqwCUBAABmAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2025-10-27T23:46:48.165Z",
+              "EditorCaption": ""
+            }
+          ]
+        },
+        {
+          "DockedWidth": 624,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Application12X.cpp",
+              "DocumentMoniker": "C:\\Users\\Estudiante\\Documents\\Alejandra\\ComputoGrafico2025-4\\Proyectos\\DirectXApplication\\src\\Application12X.cpp",
+              "RelativeDocumentMoniker": "DirectXApplication\\src\\Application12X.cpp",
+              "ToolTip": "C:\\Users\\Estudiante\\Documents\\Alejandra\\ComputoGrafico2025-4\\Proyectos\\DirectXApplication\\src\\Application12X.cpp",
+              "RelativeToolTip": "DirectXApplication\\src\\Application12X.cpp",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAABPAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2025-10-28T00:06:09.321Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Application12X.h",
+              "DocumentMoniker": "C:\\Users\\Estudiante\\Documents\\Alejandra\\ComputoGrafico2025-4\\Proyectos\\DirectXApplication\\src\\Application12X.h",
+              "RelativeDocumentMoniker": "DirectXApplication\\src\\Application12X.h",
+              "ToolTip": "C:\\Users\\Estudiante\\Documents\\Alejandra\\ComputoGrafico2025-4\\Proyectos\\DirectXApplication\\src\\Application12X.h",
+              "RelativeToolTip": "DirectXApplication\\src\\Application12X.h",
+              "ViewState": "AgIAABsAAAAAAAAAAAAAAC8AAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2025-10-28T00:06:27.503Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "main.cpp",
+              "DocumentMoniker": "C:\\Users\\Estudiante\\Documents\\Alejandra\\ComputoGrafico2025-4\\Proyectos\\DirectXApplication\\src\\main.cpp",
+              "RelativeDocumentMoniker": "DirectXApplication\\src\\main.cpp",
+              "ToolTip": "C:\\Users\\Estudiante\\Documents\\Alejandra\\ComputoGrafico2025-4\\Proyectos\\DirectXApplication\\src\\main.cpp",
+              "RelativeToolTip": "DirectXApplication\\src\\main.cpp",
+              "ViewState": "AgIAAA4AAAAAAAAAAAAuwDkAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2025-10-27T23:49:06.219Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Application.cpp",
+              "DocumentMoniker": "C:\\Users\\Estudiante\\Documents\\Alejandra\\ComputoGrafico2025-4\\Proyectos\\Application\\src\\Application.cpp",
+              "RelativeDocumentMoniker": "Application\\src\\Application.cpp",
+              "ToolTip": "C:\\Users\\Estudiante\\Documents\\Alejandra\\ComputoGrafico2025-4\\Proyectos\\Application\\src\\Application.cpp",
+              "RelativeToolTip": "Application\\src\\Application.cpp",
+              "ViewState": "AgIAABkBAAAAAAAAAAD4vysBAAAdAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2025-10-28T01:04:09.068Z",
               "EditorCaption": ""
             }
           ]

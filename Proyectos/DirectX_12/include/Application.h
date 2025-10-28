@@ -54,7 +54,7 @@ private:
 	Microsoft::WRL::ComPtr<ID3D12Device> g_device;
 	Microsoft::WRL::ComPtr<ID3D12CommandQueue> g_commandQueue;
 	Microsoft::WRL::ComPtr<IDXGISwapChain4> g_swapChain;
-	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> g_rtvHeap;
+	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> g_rtvHeap;  ////////////////////////
 	Microsoft::WRL::ComPtr<ID3D12CommandAllocator> g_commandAllocator;
 	Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> g_commandList;
 

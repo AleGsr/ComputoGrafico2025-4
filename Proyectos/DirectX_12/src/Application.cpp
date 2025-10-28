@@ -157,7 +157,7 @@ void Application::setupCommandList()
 	g_commandList->Close(); // La lista debe estar cerrada para el primer reset.	
 }
 
-void Application::clearColorBuffer(const float& r, const float& g, const float& b, const float& a)
+void Application::clearColorBuffer(const float& r, const float& g, const float& b, const float& a) //No se usa en el nuevo
 {
 	// Obtener el handle al RTV actual
 	D3D12_CPU_DESCRIPTOR_HANDLE rtvHandle = g_rtvHeap->GetCPUDescriptorHandleForHeapStart();
