@@ -33,6 +33,8 @@ private:
 	glm::vec3 center{1.0f,1.0f,0.5f};
 
 
+
+
 public:
 
 	GLFWwindow* window;
@@ -44,6 +46,16 @@ public:
 	float moveVertical;  //cuanto rota en y
 
 
+	//Variables de elementos del draw
+	GLuint programToUse;
+	GLuint geometryToUse;
+
+	std::string typeGeometry;
+	GLenum drawModes;  //Tipo de dibujo
+	int vertexNumber;  //Numero de vertices
+
+	int currentProgram = 1;  //ID del Programa actual
+	int currentGeometry = 1;  //ID de la geometría actual
 
 
 	//Escalar
@@ -56,9 +68,6 @@ public:
 	void update();
 	void draw();
 
-
-	float currentProgram = 1;
-	float currentGeometry = 1;
 	
 
 	std::string fileToString(const std::string& filename);
