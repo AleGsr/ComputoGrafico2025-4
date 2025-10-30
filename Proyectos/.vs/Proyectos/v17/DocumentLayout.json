@@ -1,8 +1,9 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\Estudiante\\Documents\\Alejandra\\ComputoGrafico2025-4\\Proyectos\\",
+  "WorkspaceRootPath": "C:\\Users\\alega\\Documents\\GitHub\\ComputoGrafico2025-4\\Proyectos\\",
   "Documents": [
     {
+<<<<<<< HEAD
       "AbsoluteMoniker": "D:0:0:{63C767C1-2F86-4E6D-BF09-5C684BA9A217}|DirectX12Triangle\\DirectX12Triangle.vcxproj|C:\\Users\\Estudiante\\Documents\\Alejandra\\ComputoGrafico2025-4\\Proyectos\\DirectX12Triangle\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{63C767C1-2F86-4E6D-BF09-5C684BA9A217}|DirectX12Triangle\\DirectX12Triangle.vcxproj|solutionrelative:DirectX12Triangle\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
@@ -33,6 +34,18 @@
     {
       "AbsoluteMoniker": "D:0:0:{FCFFEC48-1A6E-460A-96EF-B341FFA57993}|DirectX_12\\DirectX_2.vcxproj|C:\\Users\\Estudiante\\Documents\\Alejandra\\ComputoGrafico2025-4\\Proyectos\\DirectX_12\\src\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{FCFFEC48-1A6E-460A-96EF-B341FFA57993}|DirectX_12\\DirectX_2.vcxproj|solutionrelative:DirectX_12\\src\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+=======
+      "AbsoluteMoniker": "D:0:0:{C7AB1E14-92A7-49AA-995D-CCB4207A0A5A}|Application\\Application.vcxproj|C:\\Users\\alega\\Documents\\GitHub\\ComputoGrafico2025-4\\Proyectos\\Application\\src\\Application.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{C7AB1E14-92A7-49AA-995D-CCB4207A0A5A}|Application\\Application.vcxproj|solutionrelative:Application\\src\\Application.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C7AB1E14-92A7-49AA-995D-CCB4207A0A5A}|Application\\Application.vcxproj|C:\\Users\\alega\\Documents\\GitHub\\ComputoGrafico2025-4\\Proyectos\\Application\\include\\Application.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{C7AB1E14-92A7-49AA-995D-CCB4207A0A5A}|Application\\Application.vcxproj|solutionrelative:Application\\include\\Application.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C7AB1E14-92A7-49AA-995D-CCB4207A0A5A}|Application\\Application.vcxproj|C:\\Users\\alega\\Documents\\GitHub\\ComputoGrafico2025-4\\Proyectos\\Application\\src\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{C7AB1E14-92A7-49AA-995D-CCB4207A0A5A}|Application\\Application.vcxproj|solutionrelative:Application\\src\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+>>>>>>> 5efcd725a2c51df18aa6a1cdfbedca042f331221
     }
   ],
   "DocumentGroupContainers": [
@@ -41,6 +54,7 @@
       "VerticalTabListWidth": 256,
       "DocumentGroups": [
         {
+<<<<<<< HEAD
           "DockedWidth": 691,
           "SelectedChildIndex": 1,
           "Children": [
@@ -57,10 +71,54 @@
               "WhenOpened": "2025-10-28T00:56:47.122Z",
               "EditorCaption": ""
             },
+=======
+          "DockedWidth": 485,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "main.cpp",
+              "DocumentMoniker": "C:\\Users\\alega\\Documents\\GitHub\\ComputoGrafico2025-4\\Proyectos\\Application\\src\\main.cpp",
+              "RelativeDocumentMoniker": "Application\\src\\main.cpp",
+              "ToolTip": "C:\\Users\\alega\\Documents\\GitHub\\ComputoGrafico2025-4\\Proyectos\\Application\\src\\main.cpp",
+              "RelativeToolTip": "Application\\src\\main.cpp",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2025-10-24T00:38:05.561Z",
+              "EditorCaption": ""
+            }
+          ]
+        },
+        {
+          "DockedWidth": 541,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Application.h",
+              "DocumentMoniker": "C:\\Users\\alega\\Documents\\GitHub\\ComputoGrafico2025-4\\Proyectos\\Application\\include\\Application.h",
+              "RelativeDocumentMoniker": "Application\\include\\Application.h",
+              "ToolTip": "C:\\Users\\alega\\Documents\\GitHub\\ComputoGrafico2025-4\\Proyectos\\Application\\include\\Application.h",
+              "RelativeToolTip": "Application\\include\\Application.h",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAAALAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2025-10-24T00:38:08.27Z",
+              "EditorCaption": ""
+            }
+          ]
+        },
+        {
+          "DockedWidth": 526,
+          "SelectedChildIndex": 0,
+          "Children": [
+>>>>>>> 5efcd725a2c51df18aa6a1cdfbedca042f331221
             {
               "$type": "Document",
               "DocumentIndex": 1,
               "Title": "Application.cpp",
+<<<<<<< HEAD
               "DocumentMoniker": "C:\\Users\\Estudiante\\Documents\\Alejandra\\ComputoGrafico2025-4\\Proyectos\\DirectX_12\\src\\Application.cpp",
               "RelativeDocumentMoniker": "DirectX_12\\src\\Application.cpp",
               "ToolTip": "C:\\Users\\Estudiante\\Documents\\Alejandra\\ComputoGrafico2025-4\\Proyectos\\DirectX_12\\src\\Application.cpp",
@@ -158,6 +216,15 @@
               "ViewState": "AgIAABkBAAAAAAAAAAD4vysBAAAdAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2025-10-28T01:04:09.068Z",
+=======
+              "DocumentMoniker": "C:\\Users\\alega\\Documents\\GitHub\\ComputoGrafico2025-4\\Proyectos\\Application\\src\\Application.cpp",
+              "RelativeDocumentMoniker": "Application\\src\\Application.cpp",
+              "ToolTip": "C:\\Users\\alega\\Documents\\GitHub\\ComputoGrafico2025-4\\Proyectos\\Application\\src\\Application.cpp",
+              "RelativeToolTip": "Application\\src\\Application.cpp",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAIkAAAAdAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2025-10-24T00:38:02.25Z",
+>>>>>>> 5efcd725a2c51df18aa6a1cdfbedca042f331221
               "EditorCaption": ""
             }
           ]
