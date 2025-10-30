@@ -69,6 +69,7 @@ public:
 	const int Width{ 1280 };
 	const int Height{ 1024 };
 	GLFWwindow* window;
+
 	HWND GetWindowNativeHandler() const;
 	void setup();
 	void update();
