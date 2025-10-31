@@ -64,6 +64,10 @@ private:
 	UINT g_rtvDescriptorSize;
 	
 
+	//Tarea setup Depth Buffer
+	Microsoft::WRL::ComPtr<ID3D12Resource> depthResourceBuffer;
+	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> heapDeepView;
+
 
 public:
 	const int Width{ 1280 };
@@ -76,4 +80,8 @@ public:
 	void draw();
 	void clearColorBuffer(const float& r, const float& g, const float& b, const float& a);
 	void keyCallback(int key, int scancode, int action, int mods);
+
+
+	//Tarea setup Depth Buffer, declaramos la función
+	void SetUpDepthBuffer();
 };

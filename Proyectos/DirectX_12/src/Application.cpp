@@ -56,6 +56,59 @@ void Application::keyCallback(int key, int scancode, int action, int mods)
 	//teclas para mover	
 }
 
+
+//Tarea setup Depth Buffer, implementamos la información en la función
+void Application::SetUpDepthBuffer()
+{
+	//Se crea un lugar (un heap) que es donde se va a guardar la vista del buffer
+	D3D12_DESCRIPTOR_HEAP_DESC descriptionHeap = {};
+	descriptionHeap.NumDescriptors = 1;
+	descriptionHeap.Type = D3D12_DESCRIPTOR_HEAP_TYPE_DSV;
+	descriptionHeap.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
+
+	g_device->CreateDescriptorHeap(&descriptionHeap, IID_PPV_ARGS(&heapDeepView));
+
+
+	//Le damos las características de las texturas que queremos que guarde
+	D3D12_RESOURCE_DESC descriptionTexture = {};
+	descriptionTexture.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;  //La textura 2D
+	descriptionTexture.Width = Width;   //El ancho de la ventana
+	descriptionTexture.Height = Height;   //El alto de la ventana
+	descriptionTexture.DepthOrArraySize = 1;
+	descriptionTexture.MipLevels = 1;
+	descriptionTexture.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+	descriptionTexture.SampleDesc.Count = 1;
+	descriptionTexture.Flags = D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL;
+
+
+	//Se define el valor con el que se va a limpiar
+	D3D12_CLEAR_VALUE initValue = {};
+	initValue.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+	initValue.DepthStencil.Depth = 1.0f;
+	initValue.DepthStencil.Stencil = 0;
+
+
+	//La memoria del GPU donde estará el buffer
+	D3D12_HEAP_PROPERTIES memoryProperties = {};
+	memoryProperties.Type = D3D12_HEAP_TYPE_DEFAULT;  //La memoria del GPU
+
+
+	//Se crea el recurso del depth en el GPU
+	g_device->CreateCommittedResource(&memoryProperties,D3D12_HEAP_FLAG_NONE,&descriptionTexture,
+		D3D12_RESOURCE_STATE_DEPTH_WRITE,&initValue,IID_PPV_ARGS(&depthResourceBuffer));
+
+
+
+	//La manera visual que ocupará el GPU para escribir el buffer
+	D3D12_DEPTH_STENCIL_VIEW_DESC descriptionView = {};
+	descriptionView.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+	descriptionView.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE2D;
+
+	g_device->CreateDepthStencilView(depthResourceBuffer.Get(), &descriptionView, 
+		heapDeepView->GetCPUDescriptorHandleForHeapStart());
+
+}
+
 void Application::setupShaders()
 {
 	//Microsoft::WRL::ComPtr<ID3DBlob> errorBlob;
@@ -187,6 +240,10 @@ void Application::setup()
 	setupCommandAllocator();
 	setupCommandList();
 	setupShaders();
+
+	//Tarea setup Depth Buffer, llamamos la función
+	SetUpDepthBuffer();
+
 }
 
 void Application::update()
