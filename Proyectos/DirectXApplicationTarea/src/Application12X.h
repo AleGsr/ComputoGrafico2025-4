@@ -1,5 +1,4 @@
 #pragma once
-
 #define GLFW_INCLUDE_NONE
 #include "GLFW/glfw3.h"
 // Para obtener el HWND de la ventana de GLFW
@@ -21,22 +20,23 @@
 #include <string>
 
 
+
 class Application12X
 {
 
 private:
-	void ThrowIfFailed(HRESULT hr, const std::string& msg);
-	void ThrowIfFailed(HRESULT hr);
-	void setupGeometry();
-	void setupShaders();
-	void setupDevice();
-	void setupCommandQueue();
-	void setupSwapChain();
-	void setupDescriptorHeap();
-	void setupRenderTargetView();
-	void setupCommandAllocator();
-	void setupCommandList();
-	void swapBuffers();
+	void ThrowIfFailedX(HRESULT hr, const std::string& msg);
+	void ThrowIfFailedX(HRESULT hr);
+	void setupGeometryX();
+	void setupShadersX();
+	void setupDeviceX();
+	void setupCommandQueueX();
+	void setupSwapChainX();
+	void setupDescriptorHeapX();
+	void setupRenderTargetViewX();
+	void setupCommandAllocatorX();
+	void setupCommandListX();
+	void swapBuffersX();
 
 	std::string readFile(const std::string& filename);
 
@@ -61,31 +61,22 @@ private:
 	UINT g_rtvDescriptorSize;
 
 
+	//Tarea setup Depth Buffer
+	Microsoft::WRL::ComPtr<ID3D12Resource> depthResourceBuffer;
+	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> heapDeepView;
+
 public:
 
 	const int Width{ 1280 };
 	const int Height{ 1024 };
 	GLFWwindow* window;
 
-
-	ID3D12Device* device = nullptr;
-	HRESULT hr = D3D12CreateDevice(nullptr, D3D_FEATURE_LEVEL_12_2, IID_PPV_ARGS(&device));
-	
-
-	////command allocator is used to allocate memory on the GPU for commands
-	//Microsoft::WRL::ComPtr<ID3D12CommandAllocator> command_allocator = nullptr;
-	//hr = device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&command_allocator));
-	//hr = command_allocator->Reset();
-
-
-	void setupDeviceX();
-
+	HWND GetWindowNativeHandler() const;
 	void setupX();
 	void updateX();
 	void drawX();
-
-	void signatureX();
 	void clearColorBuffer(const float& r, const float& g, const float& b, const float& a);
+	void signatureX();
 	void keyCallbackX(int key, int scancode, int action, int mods);
 
 

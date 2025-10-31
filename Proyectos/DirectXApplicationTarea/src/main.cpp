@@ -16,86 +16,45 @@ Application12X app;
 
 void KeyCallBack(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-
+    app.keyCallback(key, scancode, action, mods);
 }
 
-
-LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
-    switch (message) {
-    case WM_DESTROY:
-    {
-        PostQuitMessage(0);
-        return 0;
-    }
-    break;
-    }
-
-    return DefWindowProc(hWnd, message, wParam, lParam);
-}
-
-int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine, int nCmdShow) 
+int main(void)
 {
-
-        const int width = 800;
-        const int height = 800;
-
-        // Register a simple window class
-        WNDCLASS wc = {};
-        wc.lpfnWndProc = WindowProc;
-        wc.hInstance = hInstance;
-        wc.lpszClassName = L"DirectX12Triangle";
-        RegisterClass(&wc);
-
-        // Create a window
-        HWND hwnd = CreateWindow(wc.lpszClassName, L"DirectX 12 Triangle", WS_OVERLAPPEDWINDOW,
-            CW_USEDEFAULT, CW_USEDEFAULT, width, height, nullptr, nullptr, hInstance, nullptr);
-        ShowWindow(hwnd, nCmdShow);
-
-        //The device is like a virtual representation of the GPU
-        ID3D12Device* device = nullptr;
-        HRESULT hr = D3D12CreateDevice(nullptr, D3D_FEATURE_LEVEL_12_2, IID_PPV_ARGS(&device));
-
-
-
-
     /* Initialize the library */
-    //if (!glfwInit())
-    //    return -1;
-
-    //glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-    //glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
+    if (!glfwInit())
+        return -1;
 
     /* Create a windowed mode window and its OpenGL context */
-   /* app.window = glfwCreateWindow(app.Width, app.Height, "Hello D3D11", nullptr, nullptr);
+    app.window = glfwCreateWindow(1024, 768, "Hello Application", NULL, NULL);
     if (!app.window)
     {
         glfwTerminate();
         return -1;
-    }*/
+    }
 
     /* Make the window's context current */
-   /* glfwMakeContextCurrent(app.window);*/
+    glfwMakeContextCurrent(app.window);
 
 
+    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+    {
+        //Manejar error
+        return -1;
+    }
+
+    app.setup();
+
+    glfwSetKeyCallback(app.window, KeyCallBack);
 
     while (!glfwWindowShouldClose(app.window))
     {
-        /* Render here */
-
-        /* Swap front and back buffers */
-        //glfwSwapBuffers(window);
-
-        /* Poll for and process events */
         glfwPollEvents();
- /*       app.update();
+        app.update();
 
-        app.draw();*/
-
-        /*Swap front and back buffers*/
-        glfwSwapBuffers(app.window);
+        app.draw();
     }
 
     glfwTerminate();
     return 0;
-
 }
