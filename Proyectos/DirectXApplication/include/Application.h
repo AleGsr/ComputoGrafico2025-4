@@ -26,6 +26,28 @@
 #pragma comment(lib, "dxgi.lib")
 #pragma comment(lib, "d3dcompiler.lib")
 
+typedef struct 
+{
+	DirectX::XMMATRIX model;  //4x4 flotantes = 64 bytes
+	DirectX::XMMATRIX view;  //4x4 flotantes = 64 bytes
+	DirectX::XMMATRIX projection;  //4x4 flotantes = 64 bytes
+	//192 bytes
+
+
+	// Parametros para la matriz de Vista (look At)
+	DirectX::XMVECTOR eye;   //16 bytes
+	DirectX::XMVECTOR center; //16 bytes
+	DirectX::XMVECTOR up;    //16 bytes
+	//48 bytes
+
+	//UINT triangle_angle = 0; //4 bytes
+
+	//192 + 48 + 4
+
+	float padding; 
+} SceneConstants; 
+
+
 class Application
 {
 private:
@@ -33,6 +55,7 @@ private:
 	void ThrowIfFailed(HRESULT hr);
 	void setupGeometry();
 	void setupShaders();
+	void setupConstantBuffer();
 	void setupDevice();
 	void setupCommandQueue();
 	void setupCommandAllocator();
@@ -64,19 +87,14 @@ private:
 	Microsoft::WRL::ComPtr<ID3D12PipelineState> pipelineState;
 	Microsoft::WRL::ComPtr<ID3D12Resource> renderTargets[BUFFER_COUNT];
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> rtvHeap;
+	Microsoft::WRL::ComPtr<ID3D12Resource> depthStencilBuffer;
+	Microsoft::WRL::ComPtr<ID3D12Resource> constantBuffer;
 	
 	UINT frameIndex{0};
 	UINT rtvIncrementSize;
 
 
-	DirectX::XMMATRIX model;
-	DirectX::XMMATRIX view;
-	DirectX::XMMATRIX projection;
-
-	// Parametros para la matriz de Vista (look At)
-	DirectX::XMVECTOR eye;
-	DirectX::XMVECTOR center;
-	DirectX::XMVECTOR up;
+	SceneConstants sceneConstants;
 
 	unsigned int triangle_angle = 0;
 

@@ -152,6 +152,40 @@ void Application::setupShaders()
 	pixel_shader = nullptr;
 }
 
+
+void Application::setupConstantBuffer()
+{
+	//Crear un buffer en la GPU con tipo UPLOAD (CPU-write, GPU-read
+	D3D12_HEAP_PROPERTIES heapProps = {};
+	heapProps.Type = D3D12_HEAP_TYPE_UPLOAD;
+	heapProps.CPUPageProperty = D3D12_CPU_PAGE_PROPERTY_UNKNOWN;
+	heapProps.MemoryPoolPreference = D3D12_MEMORY_POOL_UNKNOWN;
+	heapProps.CreationNodeMask = 1;
+	heapProps.VisibleNodeMask = 1;
+
+	D3D12_RESOURCE_DESC resourceDesc = {};
+	resourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
+	//resourceDesc.Width = (sizeof(SceneConstants) + 255) & 255; //Multiplo de 256 bytes (requerido)
+	resourceDesc.Width = sizeof(SceneConstants);
+	resourceDesc.Height = 1;
+	resourceDesc.DepthOrArraySize = 1;
+	resourceDesc.MipLevels = 1;
+	resourceDesc.SampleDesc.Count = 1;
+	resourceDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
+
+	device->CreateCommittedResource(
+		&heapProps,
+		D3D12_HEAP_FLAG_NONE,
+		&resourceDesc,
+		D3D12_RESOURCE_STATE_GENERIC_READ,
+		nullptr,
+		IID_PPV_ARGS(&constantBuffer)
+	);
+
+}
+
+
+
 void Application::setupDevice()
 {
 	// Crear el Device (Buscando el adaptador de hardware)
@@ -279,15 +313,15 @@ void Application::setupCommandList()
 void Application::update()
 {
 	++triangle_angle;
-	eye = DirectX::XMVectorSet(0.0f, 0.0f, -3.0f, 0.0f); //Posición de la cámara
-	center = DirectX::XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f); //Punto al que mira
-	up = DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f); //Vector 'Up'
+	sceneConstants.eye = DirectX::XMVectorSet(0.0f, 0.0f, -3.0f, 0.0f); //Posición de la cámara
+	sceneConstants.center = DirectX::XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f); //Punto al que mira
+	sceneConstants.up = DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f); //Vector 'Up'
 
-	view = DirectX::XMMatrixLookAtLH(eye, center, up);
+	sceneConstants.view = DirectX::XMMatrixLookAtLH(sceneConstants.eye, sceneConstants.center, sceneConstants.up);
 
-	projection = DirectX::XMMatrixPerspectiveFovRH(DirectX::XMConvertToRadians(60.0f), WINDOW_HEIGHT/WINDOW_WIDTH, 0.1f, 1000.0f);
+	sceneConstants.projection = DirectX::XMMatrixPerspectiveFovRH(DirectX::XMConvertToRadians(60.0f), WINDOW_HEIGHT/WINDOW_WIDTH, 0.1f, 1000.0f);
 	DirectX::XMVECTOR rotationAxis = DirectX::XMVectorSet(1.0f, 0.0f, 0.0f, 1.0f);
-	model = DirectX::XMMatrixRotationAxis(rotationAxis, DirectX::XMConvertToRadians(triangle_angle));
+	sceneConstants.model = DirectX::XMMatrixRotationAxis(rotationAxis, DirectX::XMConvertToRadians(triangle_angle));
 
 }
 
@@ -327,8 +361,21 @@ void Application::draw()
 	commandList->SetGraphicsRootSignature(rootSignature.Get());
 	commandList->SetPipelineState(pipelineState.Get());  //Shaders, selecciona los shaders que se van a usar
 
+
+	//Copar al buffer mapeado (ya creado con tipo UPLOAD)
+	void* mappedMemory;
+	ThrowIfFailed(constantBuffer->Map(0, nullptr, &mappedMemory), "fallo al copiar las constantes");
+	//Copiar los datos de la estructura al constant bugffer
+	memcpy(mappedMemory, &sceneConstants, sizeof(SceneConstants));
+
+	commandList->SetGraphicsRootConstantBufferView(0, constantBuffer->GetGPUVirtualAddress());
+	constantBuffer->Unmap(0, nullptr);
+
+
+
+
 	//Pass parameters
-	commandList->SetGraphicsRoot32BitConstant(0, triangle_angle, 0); //Es un bloque de memoria de 32 bits que se le pasa el triangle_angle
+	//commandList->SetGraphicsRoot32BitConstant(0, triangle_angle, 0); //Es un bloque de memoria de 32 bits que se le pasa el triangle_angle
 
 	//// Draw the triangle
 	//commandList->DrawInstanced(3, 1, 0, 0);
@@ -377,4 +424,5 @@ void Application::setup()
 	setupRenderTargetView();
 	setupSignature();
 	setupShaders();
+	setupConstantBuffer();
 }
