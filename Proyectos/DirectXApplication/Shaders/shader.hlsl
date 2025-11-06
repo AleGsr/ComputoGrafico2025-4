@@ -15,8 +15,8 @@ cbuffer SceneConstants : register(b0)
     float4 eye; //16 bytes
     float4 center; //16 bytes
     float4 up; //16 bytes
-
-    float padding;
+    uint angle;
+    float3 padding;
 }
 
 
@@ -45,16 +45,25 @@ PSInput VSMain(unsigned int index : SV_VertexID) {
     float cosTheta = cos(angle * rotation_speed);
     float sinTheta = sin(angle * rotation_speed);
     
+    
     float2 rotated_pos;
     rotated_pos.x = input_pos.x * cosTheta - input_pos.y * sinTheta;
     rotated_pos.y = input_pos.x * sinTheta + input_pos.y * cosTheta;
     
     
     
-    //Como se multiplica una matriz por un vector, matriz 4x4 por un vectyor de 4
     
-    float4x4 accum = float4x4(1.0f);
-    output.position = null(projection * view * model * float4(rotated_pos.x, rotated_pos.y, 0.0f, 1.0f);
+    
+
+    //float4 localPos = float4 (rotated_pos.xy, 0.0f, 1.0f);
+    //float4 worldPos = mul(model, localPos);
+    //float4 viewPos = mul(view, worldPos);
+    //float4 clipPos = mul(projection, viewPos);
+    
+    
+    
+    output.position = mul(projection, mul(view, mul(model, mul(rotated_pos.xy, 0.0f, 1.0f))));
+    //output.position = mul(projection, mul(view, mul(model, float4(rotated_pos.xy, 0.0f, 1.0f))));
     output.color = colors[index];
     return output;
 }

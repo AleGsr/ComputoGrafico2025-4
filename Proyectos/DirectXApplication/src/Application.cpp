@@ -182,6 +182,10 @@ void Application::setupConstantBuffer()
 		IID_PPV_ARGS(&constantBuffer)
 	);
 
+	ThrowIfFailed(constantBuffer->Map(0, nullptr, &mappedMemory), "fallo al copiar constantes");
+	constantBuffer->Map(0, nullptr, reinterpret_cast<void**>(&mappedMemory));
+
+
 }
 
 
@@ -263,10 +267,9 @@ void Application::setupSignature()
 	//Root signature is like have many object buffers and textures we want to use when drawing.
 	//For our rotating triangle, we only need a single constant that is going to be our angle
 	D3D12_ROOT_PARAMETER rootParameters[1] = {};
-	rootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_32BIT_CONSTANTS;
-	rootParameters[0].Constants.Num32BitValues = 1;
-	rootParameters[0].Constants.ShaderRegister = 0;
-	rootParameters[0].Constants.RegisterSpace = 0;
+	rootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+	rootParameters[0].Descriptor.ShaderRegister = 0; //register(b0)
+	rootParameters[0].Descriptor.RegisterSpace = 0;
 	rootParameters[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
 
 	rootSignature = nullptr;
@@ -280,7 +283,7 @@ void Application::setupSignature()
 	ID3DBlob* signatureBlob = nullptr;
 	ID3DBlob* errorBlob = nullptr;
 	ThrowIfFailed(D3D12SerializeRootSignature(&rootSignatureDesc, D3D_ROOT_SIGNATURE_VERSION_1, &signatureBlob, &errorBlob), "Error creating signature 1");
-		ThrowIfFailed(device->CreateRootSignature(0, signatureBlob->GetBufferPointer(), signatureBlob->GetBufferSize(), IID_PPV_ARGS(&rootSignature)), "Error creating signature 2");
+	ThrowIfFailed(device->CreateRootSignature(0, signatureBlob->GetBufferPointer(), signatureBlob->GetBufferSize(), IID_PPV_ARGS(&rootSignature)), "Error creating signature 2");
 
 	if (signatureBlob) {
 		signatureBlob->Release();
@@ -313,15 +316,18 @@ void Application::setupCommandList()
 void Application::update()
 {
 	++triangle_angle;
-	sceneConstants.eye = DirectX::XMVectorSet(0.0f, 0.0f, -3.0f, 0.0f); //Posición de la cámara
-	sceneConstants.center = DirectX::XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f); //Punto al que mira
-	sceneConstants.up = DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f); //Vector 'Up'
+	sceneConstants.eye = DirectX::XMVectorSet(0.0f, 0.0f, -3.0f, 1.0f); //Posición de la cámara
+	sceneConstants.center = DirectX::XMVectorSet(0.0f, 0.0f, 0.0f, 1.0f); //Punto al que mira
+	sceneConstants.up = DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 1.0f); //Vector 'Up'
 
-	sceneConstants.view = DirectX::XMMatrixLookAtLH(sceneConstants.eye, sceneConstants.center, sceneConstants.up);
+	sceneConstants.view = DirectX::XMMatrixTranspose(DirectX::XMMatrixLookAtLH(sceneConstants.eye, sceneConstants.center, sceneConstants.up));
 
-	sceneConstants.projection = DirectX::XMMatrixPerspectiveFovRH(DirectX::XMConvertToRadians(60.0f), WINDOW_HEIGHT/WINDOW_WIDTH, 0.1f, 1000.0f);
+	//sceneConstants.triangleAngle = DirectX::XMMatrixRotationAxis(DirectX::XMVECTOR Axis, float Angle);
+
+	float aspect = static_cast<float>(WINDOW_WIDTH) / static_cast<float>(WINDOW_HEIGHT);
+	sceneConstants.projection = DirectX::XMMatrixIdentity();
 	DirectX::XMVECTOR rotationAxis = DirectX::XMVectorSet(1.0f, 0.0f, 0.0f, 1.0f);
-	sceneConstants.model = DirectX::XMMatrixRotationAxis(rotationAxis, DirectX::XMConvertToRadians(triangle_angle));
+	sceneConstants.model = DirectX::XMMatrixTranspose(DirectX::XMMatrixScaling(0.5f,0.5f, 0.5f));
 
 }
 
@@ -362,29 +368,11 @@ void Application::draw()
 	commandList->SetPipelineState(pipelineState.Get());  //Shaders, selecciona los shaders que se van a usar
 
 
-	//Copar al buffer mapeado (ya creado con tipo UPLOAD)
-	void* mappedMemory;
-	ThrowIfFailed(constantBuffer->Map(0, nullptr, &mappedMemory), "fallo al copiar las constantes");
 	//Copiar los datos de la estructura al constant bugffer
 	memcpy(mappedMemory, &sceneConstants, sizeof(SceneConstants));
 
 	commandList->SetGraphicsRootConstantBufferView(0, constantBuffer->GetGPUVirtualAddress());
-	constantBuffer->Unmap(0, nullptr);
 
-
-
-
-	//Pass parameters
-	//commandList->SetGraphicsRoot32BitConstant(0, triangle_angle, 0); //Es un bloque de memoria de 32 bits que se le pasa el triangle_angle
-
-	//// Draw the triangle
-	//commandList->DrawInstanced(3, 1, 0, 0);
-
-
-
-	//int triangle_angle2 = 0;
-
-	//commandList->SetGraphicsRoot32BitConstant(0, triangle_angle2, 0); //Es un bloque de memoria de 32 bits que se le pasa el triangle_angle
 
 	// Draw the triangle
 	commandList->DrawInstanced(3, 1, 0, 0);

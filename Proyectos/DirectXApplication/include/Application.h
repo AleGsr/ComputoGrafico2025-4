@@ -40,11 +40,10 @@ typedef struct
 	DirectX::XMVECTOR up;    //16 bytes
 	//48 bytes
 
-	//UINT triangle_angle = 0; //4 bytes
 
+	UINT triangleAngle; //4 bytes
 	//192 + 48 + 4
-
-	float padding; 
+	float padding[3]; 
 } SceneConstants; 
 
 
@@ -92,6 +91,7 @@ private:
 	
 	UINT frameIndex{0};
 	UINT rtvIncrementSize;
+	void* mappedMemory;
 
 
 	SceneConstants sceneConstants;
@@ -100,7 +100,7 @@ private:
 
 public:
 	const int WINDOW_WIDTH = 1024;
-	const int WINDOW_HEIGHT = 1024;
+	const int WINDOW_HEIGHT = 768;
 	GLFWwindow* window;
 	HWND GetWindowNativeHandler() const;
 	void setup();
