@@ -1,12 +1,94 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\Estudiante\\Documents\\Alejandra\\ComputoGrafico2025-4\\Proyectos\\",
-  "Documents": [],
+  "WorkspaceRootPath": "C:\\Users\\alega\\Documents\\GitHub\\ComputoGrafico2025-4\\Proyectos\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{63C767C1-2F86-4E6D-BF09-5C684BA9A217}|DXModel\\DirectX12Triangle.vcxproj|C:\\Users\\alega\\Documents\\GitHub\\ComputoGrafico2025-4\\Proyectos\\DXModel\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{63C767C1-2F86-4E6D-BF09-5C684BA9A217}|DXModel\\DirectX12Triangle.vcxproj|solutionrelative:DXModel\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8A99E0CC-B3CF-464D-966D-85EE8E4E2821}|DXModelReader\\DXModelReader.vcxproj|C:\\Users\\alega\\Documents\\GitHub\\ComputoGrafico2025-4\\Proyectos\\DXModelReader\\include\\Application.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{8A99E0CC-B3CF-464D-966D-85EE8E4E2821}|DXModelReader\\DXModelReader.vcxproj|solutionrelative:DXModelReader\\include\\Application.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8A99E0CC-B3CF-464D-966D-85EE8E4E2821}|DXModelReader\\DXModelReader.vcxproj|C:\\Users\\alega\\Documents\\GitHub\\ComputoGrafico2025-4\\Proyectos\\DXModelReader\\src\\Application.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{8A99E0CC-B3CF-464D-966D-85EE8E4E2821}|DXModelReader\\DXModelReader.vcxproj|solutionrelative:DXModelReader\\src\\Application.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8A99E0CC-B3CF-464D-966D-85EE8E4E2821}|DXModelReader\\DXModelReader.vcxproj|C:\\Users\\alega\\Documents\\GitHub\\ComputoGrafico2025-4\\Proyectos\\DXModelReader\\src\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{8A99E0CC-B3CF-464D-966D-85EE8E4E2821}|DXModelReader\\DXModelReader.vcxproj|solutionrelative:DXModelReader\\src\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
       "VerticalTabListWidth": 256,
-      "DocumentGroups": []
+      "DocumentGroups": [
+        {
+          "DockedWidth": 258,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "main.cpp",
+              "DocumentMoniker": "C:\\Users\\alega\\Documents\\GitHub\\ComputoGrafico2025-4\\Proyectos\\DXModel\\main.cpp",
+              "RelativeDocumentMoniker": "DXModel\\main.cpp",
+              "ToolTip": "C:\\Users\\alega\\Documents\\GitHub\\ComputoGrafico2025-4\\Proyectos\\DXModel\\main.cpp",
+              "RelativeToolTip": "DXModel\\main.cpp",
+              "ViewState": "AgIAADgCAAAAAAAAAAAuwD8CAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2025-11-10T16:24:06.317Z",
+              "EditorCaption": ""
+            }
+          ]
+        },
+        {
+          "DockedWidth": 142,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Application.h",
+              "DocumentMoniker": "C:\\Users\\alega\\Documents\\GitHub\\ComputoGrafico2025-4\\Proyectos\\DXModelReader\\include\\Application.h",
+              "RelativeDocumentMoniker": "DXModelReader\\include\\Application.h",
+              "ToolTip": "C:\\Users\\alega\\Documents\\GitHub\\ComputoGrafico2025-4\\Proyectos\\DXModelReader\\include\\Application.h",
+              "RelativeToolTip": "DXModelReader\\include\\Application.h",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAEgAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2025-11-10T15:21:01.841Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Application.cpp",
+              "DocumentMoniker": "C:\\Users\\alega\\Documents\\GitHub\\ComputoGrafico2025-4\\Proyectos\\DXModelReader\\src\\Application.cpp",
+              "RelativeDocumentMoniker": "DXModelReader\\src\\Application.cpp",
+              "ToolTip": "C:\\Users\\alega\\Documents\\GitHub\\ComputoGrafico2025-4\\Proyectos\\DXModelReader\\src\\Application.cpp",
+              "RelativeToolTip": "DXModelReader\\src\\Application.cpp",
+              "ViewState": "AgIAAGIBAAAAAAAAAAAAAEgAAAAiAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2025-11-10T15:21:01.034Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "main.cpp",
+              "DocumentMoniker": "C:\\Users\\alega\\Documents\\GitHub\\ComputoGrafico2025-4\\Proyectos\\DXModelReader\\src\\main.cpp",
+              "RelativeDocumentMoniker": "DXModelReader\\src\\main.cpp",
+              "ToolTip": "C:\\Users\\alega\\Documents\\GitHub\\ComputoGrafico2025-4\\Proyectos\\DXModelReader\\src\\main.cpp",
+              "RelativeToolTip": "DXModelReader\\src\\main.cpp",
+              "ViewState": "AgIAAB4AAAAAAAAAAAAAAP4AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2025-11-10T15:21:00.389Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
     }
   ]
 }
