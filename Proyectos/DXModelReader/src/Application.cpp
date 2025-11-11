@@ -55,7 +55,7 @@ void Application::setRasterizerState(D3D12_RASTERIZER_DESC& rasterizer_desc) {
 void Application::setDepthStencilState(D3D12_DEPTH_STENCIL_DESC& depth_stencil_desc) {
 	depth_stencil_desc = {};
 
-	depth_stencil_desc.DepthEnable = FALSE;
+	depth_stencil_desc.DepthEnable = TRUE;
 	depth_stencil_desc.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ALL;
 	depth_stencil_desc.DepthFunc = D3D12_COMPARISON_FUNC_GREATER;
 
@@ -190,21 +190,22 @@ void Application::setupConstantBuffer()
 
 
 
-void Application::setupDevice()
+void Application::setupDevice() //Modificado
 {
-	// Crear el Device (Buscando el adaptador de hardware)
-	Microsoft::WRL::ComPtr<IDXGIAdapter1> adapter;
-	for (UINT adapterIndex = 0; DXGI_ERROR_NOT_FOUND != factory->EnumAdapters1(adapterIndex, &adapter); ++adapterIndex) {
-		DXGI_ADAPTER_DESC1 desc;
-		adapter->GetDesc1(&desc);
-		if (desc.Flags & DXGI_ADAPTER_FLAG_SOFTWARE) continue;
-		if (SUCCEEDED(D3D12CreateDevice(adapter.Get(), D3D_FEATURE_LEVEL_12_2, IID_PPV_ARGS(&device)))) {
-			break;
-		}
-	}
+	//// Crear el Device (Buscando el adaptador de hardware)
+	//Microsoft::WRL::ComPtr<IDXGIAdapter1> adapter;
+	//for (UINT adapterIndex = 0; DXGI_ERROR_NOT_FOUND != factory->EnumAdapters1(adapterIndex, &adapter); ++adapterIndex) {
+	//	DXGI_ADAPTER_DESC1 desc;
+	//	adapter->GetDesc1(&desc);
+	//	if (desc.Flags & DXGI_ADAPTER_FLAG_SOFTWARE) continue;
+	//	if (SUCCEEDED(D3D12CreateDevice(adapter.Get(), D3D_FEATURE_LEVEL_12_2, IID_PPV_ARGS(&device)))) {
+	//		break;
+	//	}
+	//}
+	HRESULT hr = D3D12CreateDevice(nullptr, D3D_FEATURE_LEVEL_11_0, IID_PPV_ARGS(&device));
 }
 
-void Application::setupCommandQueue()
+void Application::setupCommandQueue() //No modificado pero si en DXModel
 {
 	//command queue decides which order the command lists should execute. In our case, we only have one command list.	
 	D3D12_COMMAND_QUEUE_DESC queueDesc = {};
@@ -223,7 +224,7 @@ void Application::setupSwapChain()
 	swapChainDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 	swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 	swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;
-	swapChainDesc.OutputWindow = GetWindowNativeHandler();
+	swapChainDesc.OutputWindow = GetWindowNativeHandler(); //Es diferente al DXModel
 	swapChainDesc.SampleDesc.Count = 1;
 	swapChainDesc.Windowed = TRUE;
 	
@@ -234,9 +235,11 @@ void Application::setupSwapChain()
 	ThrowIfFailed(tempSwapChain->QueryInterface(IID_PPV_ARGS(&swapChain)), "Error casting to swap chain");
 	tempSwapChain->Release();
 	tempSwapChain = nullptr;
+
+	//Hasta linea 229 de DXModel
 }
 
-void Application::setupDescriptorHeap()
+void Application::setupDescriptorHeap() //No se modifica
 {
 	//memory descriptor heap to store render target views(RTV). Descriptor describes how to interperate resource memory.
 	rtvHeap = nullptr;
@@ -295,7 +298,7 @@ void Application::setupSignature()
 	}
 }
 
-void Application::setupCommandAllocator()
+void Application::setupCommandAllocator() //DXModel linea 197
 {
 	//Crear Command Allocator y Command List
 	ThrowIfFailed(device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&commandAllocator)),
@@ -303,7 +306,7 @@ void Application::setupCommandAllocator()
 	ThrowIfFailed(commandAllocator->Reset(), "Error reseting command Allocator");
 }
 
-void Application::setupCommandList()
+void Application::setupCommandList()  //DXModel linea 202
 {
 	//command list is used to store a list of commands that we want to execute on the GPU
 	ThrowIfFailed(device->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, commandAllocator.Get(), nullptr, IID_PPV_ARGS(&commandList)), 
@@ -313,12 +316,12 @@ void Application::setupCommandList()
 
 
 
-void Application::update()
+void Application::update() //Van sin el transpose
 {
 	++triangle_angle;
 	sceneConstants.eye = DirectX::XMVectorSet(0.0f, 0.0f, -3.0f, 1.0f); //Posición de la cámara
 	sceneConstants.center = DirectX::XMVectorSet(0.0f, 0.0f, 0.0f, 1.0f); //Punto al que mira
-	sceneConstants.up = DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 1.0f); //Vector 'Up'
+	sceneConstants.up = DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f); //Vector 'Up' la w va en 0 porque no es un vector
 
 	sceneConstants.view = DirectX::XMMatrixTranspose(DirectX::XMMatrixLookAtLH(sceneConstants.eye, sceneConstants.center, sceneConstants.up));
 

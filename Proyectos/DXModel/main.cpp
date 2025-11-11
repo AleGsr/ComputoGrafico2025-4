@@ -152,7 +152,7 @@ void set_depth_stencil_state(D3D12_DEPTH_STENCIL_DESC &depth_stencil_desc) {
     depth_stencil_desc.BackFace.StencilPassOp = D3D12_STENCIL_OP_KEEP;
     depth_stencil_desc.BackFace.StencilFunc = D3D12_COMPARISON_FUNC_ALWAYS;
 }
-
+//No agregado
 LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
     switch (message) {
         case WM_DESTROY:
@@ -191,9 +191,9 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
     D3D12_COMMAND_QUEUE_DESC queue_desc = {};
     queue_desc.Type = D3D12_COMMAND_LIST_TYPE_DIRECT;
     queue_desc.Flags = D3D12_COMMAND_QUEUE_FLAG_NONE;
-    hr = device->CreateCommandQueue(&queue_desc, IID_PPV_ARGS(&command_queue));
+    hr = device->CreateCommandQueue(&queue_desc, IID_PPV_ARGS(&command_queue)); //Linea 214 Application.cpp
 
-    //command allocator is used to allocate memory on the GPU for commands
+    //command allocator is used to allocate memory on the GPU for commands 
     ID3D12CommandAllocator *command_allocator = nullptr;
     hr = device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&command_allocator));
     hr = command_allocator->Reset();
@@ -203,9 +203,9 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
     hr = device->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, command_allocator, nullptr, IID_PPV_ARGS(&command_list));
     hr = command_list->Close();
 
-    //helper object to create a swap chain
+    //helper object to create a swap chain  
     IDXGIFactory4 *factory = nullptr;
-    hr = CreateDXGIFactory1(IID_PPV_ARGS(&factory));
+    hr = CreateDXGIFactory1(IID_PPV_ARGS(&factory)); //AUN NO AGREGADO
 
     //create swap chain
     DXGI_SWAP_CHAIN_DESC swap_chain_desc = {};
@@ -215,7 +215,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
     swap_chain_desc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
     swap_chain_desc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
     swap_chain_desc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;
-    swap_chain_desc.OutputWindow = hwnd;
+    swap_chain_desc.OutputWindow = hwnd;  
     swap_chain_desc.SampleDesc.Count = 1;
     swap_chain_desc.Windowed = TRUE;
 
@@ -227,7 +227,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
     hr = temp_swap_chain->QueryInterface(IID_PPV_ARGS(&swap_chain));
     temp_swap_chain->Release();
     temp_swap_chain = nullptr;
-
+    
     //memory descriptor heap to store render target views(RTV). Descriptor describes how to interperate resource memory.
     ID3D12DescriptorHeap *rtv_heap = nullptr;
     D3D12_DESCRIPTOR_HEAP_DESC rtv_heap_desc = {};
@@ -235,7 +235,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
     rtv_heap_desc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
     hr = device->CreateDescriptorHeap(&rtv_heap_desc, IID_PPV_ARGS(&rtv_heap));
 
-    ID3D12Resource *render_targets[2];
+    ID3D12Resource *render_targets[2]; //NO AGREGADO
 
     UINT rtv_increment_size = device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
     {
@@ -247,7 +247,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
             rtv_handle.ptr += rtv_increment_size;
         }
     }
-
+    ////////////////////////
     //memory descriptor heap to store render target views(DSV). Descriptor describes how to interperate resource memory.
     ID3D12DescriptorHeap *dsv_heap = nullptr;
     D3D12_DESCRIPTOR_HEAP_DESC dsv_heap_desc = {};
