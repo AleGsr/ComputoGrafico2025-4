@@ -62,8 +62,8 @@ PSInput VSMain(unsigned int index : SV_VertexID) {
     
     
     
-    output.position = mul(projection, mul(view, mul(model, mul(rotated_pos.xy, 0.0f, 1.0f))));
-    //output.position = mul(projection, mul(view, mul(model, float4(rotated_pos.xy, 0.0f, 1.0f))));
+    //output.position = mul(projection, mul(view, mul(model, mul(rotated_pos.xy, 0.0f, 1.0f))));
+    output.position = mul(projection, mul(view, mul(model, float4(rotated_pos.xy, 0.0f, 1.0f))));
     output.color = colors[index];
     return output;
 }

@@ -95,6 +95,9 @@ HWND Application::GetWindowNativeHandler() const
 
 void Application::setupGeometry()
 {
+	//hr algunos
+	//rd
+
 	std::vector<float> geometry{
 		// X    Y    Z     W
 		-1.0f,  1.0, 0.0f, 1.0f,  //vertice 1
@@ -120,8 +123,8 @@ void Application::setupShaders()
 	//compile shaders
 	ID3DBlob* vertex_shader = nullptr;
 	ID3DBlob* pixel_shader = nullptr;
-	ThrowIfFailed(D3DCompileFromFile(L"Shaders/shader.hlsl", nullptr, nullptr, "VSMain", "vs_5_0", 0, 0, &vertex_shader, nullptr), "Error compiling shader 1"); 
-	ThrowIfFailed(D3DCompileFromFile(L"Shaders/shader.hlsl", nullptr, nullptr, "PSMain", "ps_5_0", 0, 0, &pixel_shader, nullptr), "Error compiling shader 2"); 
+	ThrowIfFailed(D3DCompileFromFile(L"Shaders/shader.hlsl", nullptr, nullptr, "VSMain", "vs_5_0", 0, 0, &vertex_shader, nullptr), "Error compiling shader 1");
+	ThrowIfFailed(D3DCompileFromFile(L"Shaders/shader.hlsl", nullptr, nullptr, "PSMain", "ps_5_0", 0, 0, &pixel_shader, nullptr), "Error compiling shader 2");
 
 	// Pipeline state
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC pso_desc = {};
@@ -134,12 +137,23 @@ void Application::setupShaders()
 	pso_desc.SampleMask = UINT_MAX;
 	setRasterizerState(pso_desc.RasterizerState);
 	setDepthStencilState(pso_desc.DepthStencilState);
-	pso_desc.InputLayout.pInputElementDescs = nullptr;
-	pso_desc.InputLayout.NumElements = 0;
+
+	//-Agregado
+	D3D12_INPUT_ELEMENT_DESC input_elements[] = {
+		   {"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0},
+		   {"NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0},
+	};
+	//Agregado-
+
+	//pso_desc.InputLayout.pInputElementDescs = nullptr;
+	pso_desc.InputLayout.pInputElementDescs = input_elements;
+	//pso_desc.InputLayout.NumElements = 0;
+	pso_desc.InputLayout.NumElements = _countof(input_elements);
 	pso_desc.IBStripCutValue = D3D12_INDEX_BUFFER_STRIP_CUT_VALUE_DISABLED;
 	pso_desc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
 	pso_desc.NumRenderTargets = 1;
 	pso_desc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM;
+	pso_desc.DSVFormat = DXGI_FORMAT_D32_FLOAT; //Linea extra
 	pso_desc.SampleDesc.Count = 1;
 	pso_desc.SampleDesc.Quality = 0;
 
@@ -150,10 +164,21 @@ void Application::setupShaders()
 	vertex_shader = nullptr;
 	pixel_shader->Release();
 	pixel_shader = nullptr;
+
+
+	//-AGREGADO
+	//Model model = load_model_from_obj("rabbit.obj");
+	ID3D12Resource* vertex_buffer = nullptr; //fast. GPU access only
+	ID3D12Resource* vertex_buffer_upload = nullptr; //slow. CPU and GPU access
+	ID3D12Resource* index_buffer = nullptr; //fast. GPU access only
+	ID3D12Resource* index_buffer_upload = nullptr; //slow. CPU and GPU access
+	//AGREGADO-
+
+
 }
 
 
-void Application::setupConstantBuffer()
+void Application::setupConstantBuffer() //YA NO SE MUEVE NADA
 {
 	//Crear un buffer en la GPU con tipo UPLOAD (CPU-write, GPU-read
 	D3D12_HEAP_PROPERTIES heapProps = {};
@@ -183,7 +208,6 @@ void Application::setupConstantBuffer()
 	);
 
 	ThrowIfFailed(constantBuffer->Map(0, nullptr, &mappedMemory), "fallo al copiar constantes");
-	constantBuffer->Map(0, nullptr, reinterpret_cast<void**>(&mappedMemory));
 
 
 }
@@ -193,15 +217,17 @@ void Application::setupConstantBuffer()
 void Application::setupDevice() //Modificado
 {
 	//// Crear el Device (Buscando el adaptador de hardware)
-	//Microsoft::WRL::ComPtr<IDXGIAdapter1> adapter;
-	//for (UINT adapterIndex = 0; DXGI_ERROR_NOT_FOUND != factory->EnumAdapters1(adapterIndex, &adapter); ++adapterIndex) {
-	//	DXGI_ADAPTER_DESC1 desc;
-	//	adapter->GetDesc1(&desc);
-	//	if (desc.Flags & DXGI_ADAPTER_FLAG_SOFTWARE) continue;
-	//	if (SUCCEEDED(D3D12CreateDevice(adapter.Get(), D3D_FEATURE_LEVEL_12_2, IID_PPV_ARGS(&device)))) {
-	//		break;
-	//	}
-	//}
+	Microsoft::WRL::ComPtr<IDXGIAdapter1> adapter;
+	for (UINT adapterIndex = 0; DXGI_ERROR_NOT_FOUND != factory->EnumAdapters1(adapterIndex, &adapter); ++adapterIndex) {
+		DXGI_ADAPTER_DESC1 desc;
+		adapter->GetDesc1(&desc);
+		if (desc.Flags & DXGI_ADAPTER_FLAG_SOFTWARE) continue;
+		if (SUCCEEDED(D3D12CreateDevice(adapter.Get(), D3D_FEATURE_LEVEL_12_2, IID_PPV_ARGS(&device)))) {
+			break;
+		}
+	}
+
+	//Agregado
 	HRESULT hr = D3D12CreateDevice(nullptr, D3D_FEATURE_LEVEL_11_0, IID_PPV_ARGS(&device));
 }
 
@@ -227,7 +253,7 @@ void Application::setupSwapChain()
 	swapChainDesc.OutputWindow = GetWindowNativeHandler(); //Es diferente al DXModel
 	swapChainDesc.SampleDesc.Count = 1;
 	swapChainDesc.Windowed = TRUE;
-	
+
 	IDXGISwapChain* tempSwapChain = nullptr;
 	ThrowIfFailed(factory->CreateSwapChain(commandQueue.Get(), &swapChainDesc, &tempSwapChain), "Failed to create swapchain");
 
@@ -270,9 +296,11 @@ void Application::setupSignature()
 	//Root signature is like have many object buffers and textures we want to use when drawing.
 	//For our rotating triangle, we only need a single constant that is going to be our angle
 	D3D12_ROOT_PARAMETER rootParameters[1] = {};
-	rootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
-	rootParameters[0].Descriptor.ShaderRegister = 0; //register(b0)
-	rootParameters[0].Descriptor.RegisterSpace = 0;
+	//rootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+	rootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_32BIT_CONSTANTS;;
+	rootParameters[0].Constants.Num32BitValues = 1; //Linea extra
+	rootParameters[0].Constants.ShaderRegister = 0; //register(b0)
+	rootParameters[0].Constants.RegisterSpace = 0;
 	rootParameters[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
 
 	rootSignature = nullptr;
@@ -309,7 +337,7 @@ void Application::setupCommandAllocator() //DXModel linea 197
 void Application::setupCommandList()  //DXModel linea 202
 {
 	//command list is used to store a list of commands that we want to execute on the GPU
-	ThrowIfFailed(device->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, commandAllocator.Get(), nullptr, IID_PPV_ARGS(&commandList)), 
+	ThrowIfFailed(device->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, commandAllocator.Get(), nullptr, IID_PPV_ARGS(&commandList)),
 		"Failed to create Command list");
 	ThrowIfFailed(commandList->Close(), "Failed to close Commandlist");
 }
@@ -330,7 +358,7 @@ void Application::update() //Van sin el transpose
 	float aspect = static_cast<float>(WINDOW_WIDTH) / static_cast<float>(WINDOW_HEIGHT);
 	sceneConstants.projection = DirectX::XMMatrixIdentity();
 	DirectX::XMVECTOR rotationAxis = DirectX::XMVectorSet(1.0f, 0.0f, 0.0f, 1.0f);
-	sceneConstants.model = DirectX::XMMatrixTranspose(DirectX::XMMatrixScaling(0.5f,0.5f, 0.5f));
+	sceneConstants.model = DirectX::XMMatrixTranspose(DirectX::XMMatrixScaling(0.5f, 0.5f, 0.5f));
 
 }
 
@@ -371,14 +399,31 @@ void Application::draw()
 	commandList->SetPipelineState(pipelineState.Get());  //Shaders, selecciona los shaders que se van a usar
 
 
-	//Copiar los datos de la estructura al constant bugffer
+	//Copiar los datos de la estructura al constant bugffer  //POSIBLE LINEA 451-464
 	memcpy(mappedMemory, &sceneConstants, sizeof(SceneConstants));
 
 	commandList->SetGraphicsRootConstantBufferView(0, constantBuffer->GetGPUVirtualAddress());
+	///---------------
 
+
+	D3D12_VERTEX_BUFFER_VIEW vertex_buffer_view = {};
+	vertex_buffer_view.BufferLocation = vertex_buffer->GetGPUVirtualAddress();
+	vertex_buffer_view.StrideInBytes = sizeof(Vertex);
+	vertex_buffer_view.SizeInBytes = sizeof(Vertex) * model.vertices.size();
+	commandList->IASetVertexBuffers(0, 1, &vertex_buffer_view);
+
+	D3D12_INDEX_BUFFER_VIEW index_buffer_view = {};
+	index_buffer_view.BufferLocation = index_buffer->GetGPUVirtualAddress();
+	index_buffer_view.SizeInBytes = sizeof(unsigned int) * model.indicies.size();
+	index_buffer_view.Format = DXGI_FORMAT_R32_UINT;
+	commandList->IASetIndexBuffer(&index_buffer_view);
+
+
+	commandList->DrawIndexedInstanced(model.indicies.size(), 1, 0, 0, 0);
 
 	// Draw the triangle
-	commandList->DrawInstanced(3, 1, 0, 0);
+	//commandList->DrawInstanced(3, 1, 0, 0);
+	/*commandList->Reset(command_allocator, nullptr);*/
 
 	{
 		D3D12_RESOURCE_BARRIER barrier = {};
@@ -389,14 +434,55 @@ void Application::draw()
 		barrier.Transition.StateAfter = D3D12_RESOURCE_STATE_PRESENT;
 		barrier.Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
 		commandList->ResourceBarrier(1, &barrier);
+		//D3D12_RESOURCE_BARRIER barrier[2] = {};
+		//barrier[0].Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
+		//barrier[0].Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
+		///*barrier[0].Transition.pResource = vertex_buffer;*/
+		//barrier[0].Transition.StateBefore = D3D12_RESOURCE_STATE_COMMON;
+		//barrier[0].Transition.StateAfter = D3D12_RESOURCE_STATE_COPY_DEST;
+		//barrier[0].Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
+
+		//barrier[1].Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
+		//barrier[1].Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
+		///*barrier[1].Transition.pResource = index_buffer;*/
+		//barrier[1].Transition.StateBefore = D3D12_RESOURCE_STATE_COMMON;
+		//barrier[1].Transition.StateAfter = D3D12_RESOURCE_STATE_COPY_DEST;
+		//barrier[1].Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
+
+		/*commandList->ResourceBarrier(2, barrier);*/
 	}
+
+	//AGREGADO
+	//copy the data from upload to the fast default buffer
+	/*command_list->CopyResource(vertex_buffer, vertex_buffer_upload);
+	command_list->CopyResource(index_buffer, index_buffer_upload);
+
+	barrier[0].Transition.StateBefore = D3D12_RESOURCE_STATE_COPY_DEST;
+	barrier[0].Transition.StateAfter = D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER;
+
+	barrier[1].Transition.StateBefore = D3D12_RESOURCE_STATE_COPY_DEST;
+	barrier[1].Transition.StateAfter = D3D12_RESOURCE_STATE_INDEX_BUFFER;*/
+	//---------------------
+
+	/*command_list->ResourceBarrier(2, barrier);*/
 
 	h = commandList->Close();
 
-	ID3D12CommandList* commandLists[] = { commandList.Get()};
+	ID3D12CommandList* commandLists[] = { commandList.Get() };
 	commandQueue->ExecuteCommandLists(1, commandLists);
 
-	h = swapChain->Present(1, 0);
+	//AGREGADO
+	// Wait on the CPU for the GPU frame to finish
+	/*const UINT64 current_fence_value = ++fence_value;
+	hr = command_queue->Signal(fence, current_fence_value);
+
+	if (fence->GetCompletedValue() < current_fence_value) {
+		hr = fence->SetEventOnCompletion(current_fence_value, fence_event);
+		WaitForSingleObject(fence_event, INFINITE);
+	}*/
+	//---------------------
+
+	h = swapChain->Present(1, 0); //NO está agregado en DXModel
 
 }
 
@@ -417,3 +503,76 @@ void Application::setup()
 	setupShaders();
 	setupConstantBuffer();
 }
+
+Model load_model_from_obj(const std::string& path) {
+	std::ifstream file(path);  // Open the file
+
+	if (!file.is_open()) {
+		return {};
+	}
+
+	Model model;
+	std::vector<DirectX::XMFLOAT3> temp_positions;
+	std::vector<DirectX::XMFLOAT3> temp_normals;
+	std::map<std::pair<unsigned int, unsigned int>, unsigned int> index_map;
+	std::vector<unsigned int> temp_face_indices;
+
+	std::string line;
+	while (std::getline(file, line)) {
+		std::stringstream ss(line);
+
+		std::string prefix;
+		ss >> prefix;
+
+		if (prefix == "v") { //vertex position
+			DirectX::XMFLOAT3 position;
+			ss >> position.x >> position.y >> position.z;
+			temp_positions.push_back(position);
+		}
+		else if (prefix == "vn") { //vertex normal
+			DirectX::XMFLOAT3 normal;
+			ss >> normal.x >> normal.y >> normal.z;
+			temp_normals.push_back(normal);
+		}
+		else if (prefix == "f") {
+			temp_face_indices.clear();
+
+			std::string vertexindex_slashslash_normalindex;
+			while (ss >> vertexindex_slashslash_normalindex) {
+				size_t slash_pos = vertexindex_slashslash_normalindex.find("//");
+
+				std::string vertex_index_str = vertexindex_slashslash_normalindex.substr(0, slash_pos);
+				std::string normal_index_str = vertexindex_slashslash_normalindex.substr(slash_pos + 2);
+				unsigned int vertex_index = std::stoi(vertex_index_str) - 1;
+				unsigned int normal_index = std::stoi(normal_index_str) - 1;
+
+				// Check if the vertex and normal index pair already exists in the map
+				auto it = index_map.find({ vertex_index, normal_index });
+
+				if (it != index_map.end()) {
+					temp_face_indices.push_back(it->second);
+				}
+				else {
+					// If it doesn't exist, create a new vertex and add it to the model
+					Vertex vertex;
+					vertex.position = temp_positions[vertex_index];
+					vertex.normal = temp_normals[normal_index];
+					unsigned int new_index = static_cast<unsigned int>(model.vertices.size());
+					model.vertices.push_back(vertex);
+					// Store the new index in the map
+					index_map[{ vertex_index, normal_index }] = new_index;
+					temp_face_indices.push_back(new_index);
+				}
+			}
+
+			for (int i = 0; i < (int)temp_face_indices.size() - 2; i++) {
+				model.indicies.push_back(temp_face_indices[0]);
+				model.indicies.push_back(temp_face_indices[i + 1]);
+				model.indicies.push_back(temp_face_indices[i + 2]);
+			}
+		}
+	}
+	file.close();  // Close the file
+	return model;
+}
+

@@ -8,6 +8,8 @@
 
 #include <iostream>
 #include <vector>
+#include <fstream>
+#include <sstream>
 #include <windows.h>
 
 
@@ -26,7 +28,22 @@
 #pragma comment(lib, "dxgi.lib")
 #pragma comment(lib, "d3dcompiler.lib")
 
-typedef struct 
+
+struct Vertex {
+    DirectX::XMFLOAT3 position;
+    DirectX::XMFLOAT3 normal;
+};
+
+struct Model {
+    std::vector<Vertex> vertices;
+    std::vector<unsigned int> indicies;
+};
+
+
+
+
+
+typedef struct
 {
 	DirectX::XMMATRIX model;  //4x4 flotantes = 64 bytes
 	DirectX::XMMATRIX view;  //4x4 flotantes = 64 bytes
@@ -43,8 +60,8 @@ typedef struct
 
 	UINT triangleAngle; //4 bytes
 	//192 + 48 + 4
-	float padding[3]; 
-} SceneConstants; 
+	float padding[3];
+} SceneConstants;
 
 
 class Application
@@ -88,8 +105,24 @@ private:
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> rtvHeap;
 	Microsoft::WRL::ComPtr<ID3D12Resource> depthStencilBuffer;
 	Microsoft::WRL::ComPtr<ID3D12Resource> constantBuffer;
-	
-	UINT frameIndex{0};
+
+	ID3D12Fence* fence = nullptr;
+	UINT64 fence_value = 0;
+
+	Model model = load_model_from_obj("rabbit.obj");
+
+	//ID3D12Resource* vertex_buffer = nullptr; //fast. GPU access only
+	Microsoft::WRL::ComPtr<ID3D12Resource> vertex_buffer;
+	//ID3D12Resource* vertex_buffer_upload = nullptr; //slow. CPU and GPU access
+	Microsoft::WRL::ComPtr<ID3D12Resource> vertex_buffer_upload;
+	//ID3D12Resource* index_buffer = nullptr; //fast. GPU access only
+	Microsoft::WRL::ComPtr<ID3D12Resource> index_buffer;
+	ID3D12Resource* index_buffer_upload = nullptr; //slow. CPU and GPU access
+	Microsoft::WRL::ComPtr<ID3D12Resource> index_buffer_upload;
+
+
+
+	UINT frameIndex{ 0 };
 	UINT rtvIncrementSize;
 	void* mappedMemory;
 
@@ -108,3 +141,4 @@ public:
 	void draw();
 	void keyCallback(int key, int scancode, int action, int mods);
 };
+

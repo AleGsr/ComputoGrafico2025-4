@@ -23,7 +23,7 @@ struct Model {
     std::vector<unsigned int> indicies;
 };
 
-Model load_model_from_obj(const std::string &path) {
+Model load_model_from_obj(const std::string& path) {
     std::ifstream file(path);  // Open the file
 
     if (!file.is_open()) {
@@ -47,11 +47,13 @@ Model load_model_from_obj(const std::string &path) {
             DirectX::XMFLOAT3 position;
             ss >> position.x >> position.y >> position.z;
             temp_positions.push_back(position);
-        } else if (prefix == "vn") { //vertex normal
+        }
+        else if (prefix == "vn") { //vertex normal
             DirectX::XMFLOAT3 normal;
             ss >> normal.x >> normal.y >> normal.z;
             temp_normals.push_back(normal);
-        } else if (prefix == "f") {
+        }
+        else if (prefix == "f") {
             temp_face_indices.clear();
 
             std::string vertexindex_slashslash_normalindex;
@@ -68,7 +70,8 @@ Model load_model_from_obj(const std::string &path) {
 
                 if (it != index_map.end()) {
                     temp_face_indices.push_back(it->second);
-                } else {
+                }
+                else {
                     // If it doesn't exist, create a new vertex and add it to the model
                     Vertex vertex;
                     vertex.position = temp_positions[vertex_index];
@@ -92,7 +95,7 @@ Model load_model_from_obj(const std::string &path) {
     return model;
 }
 
-void set_blend_state(D3D12_BLEND_DESC &blend_desc) {
+void set_blend_state(D3D12_BLEND_DESC& blend_desc) {
     blend_desc = {};
 
     blend_desc.AlphaToCoverageEnable = FALSE;
@@ -115,7 +118,7 @@ void set_blend_state(D3D12_BLEND_DESC &blend_desc) {
     }
 }
 
-void set_rasterizer_state(D3D12_RASTERIZER_DESC &rasterizer_desc) {
+void set_rasterizer_state(D3D12_RASTERIZER_DESC& rasterizer_desc) {
     rasterizer_desc = {};
 
     rasterizer_desc.FillMode = D3D12_FILL_MODE_SOLID;
@@ -131,7 +134,7 @@ void set_rasterizer_state(D3D12_RASTERIZER_DESC &rasterizer_desc) {
     rasterizer_desc.ConservativeRaster = D3D12_CONSERVATIVE_RASTERIZATION_MODE_OFF;
 }
 
-void set_depth_stencil_state(D3D12_DEPTH_STENCIL_DESC &depth_stencil_desc) {
+void set_depth_stencil_state(D3D12_DEPTH_STENCIL_DESC& depth_stencil_desc) {
     depth_stencil_desc = {};
 
     depth_stencil_desc.DepthEnable = TRUE;
@@ -155,12 +158,12 @@ void set_depth_stencil_state(D3D12_DEPTH_STENCIL_DESC &depth_stencil_desc) {
 //No agregado
 LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
     switch (message) {
-        case WM_DESTROY:
-        {
-            PostQuitMessage(0);
-            return 0;
-        }
-        break;
+    case WM_DESTROY:
+    {
+        PostQuitMessage(0);
+        return 0;
+    }
+    break;
     }
 
     return DefWindowProc(hWnd, message, wParam, lParam);
@@ -183,28 +186,28 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
     ShowWindow(hwnd, nCmdShow);
 
     //The device is like a virtual representation of the GPU
-    ID3D12Device *device = nullptr;
+    ID3D12Device* device = nullptr;
     HRESULT hr = D3D12CreateDevice(nullptr, D3D_FEATURE_LEVEL_11_0, IID_PPV_ARGS(&device));
 
     //command queue decides which order the command lists should execute. In our case, we only have one command list.
-    ID3D12CommandQueue *command_queue = nullptr;
+    ID3D12CommandQueue* command_queue = nullptr;
     D3D12_COMMAND_QUEUE_DESC queue_desc = {};
     queue_desc.Type = D3D12_COMMAND_LIST_TYPE_DIRECT;
     queue_desc.Flags = D3D12_COMMAND_QUEUE_FLAG_NONE;
     hr = device->CreateCommandQueue(&queue_desc, IID_PPV_ARGS(&command_queue)); //Linea 214 Application.cpp
 
     //command allocator is used to allocate memory on the GPU for commands 
-    ID3D12CommandAllocator *command_allocator = nullptr;
+    ID3D12CommandAllocator* command_allocator = nullptr;
     hr = device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&command_allocator));
     hr = command_allocator->Reset();
 
     //command list is used to store a list of commands that we want to execute on the GPU
-    ID3D12GraphicsCommandList *command_list = nullptr;
+    ID3D12GraphicsCommandList* command_list = nullptr;
     hr = device->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, command_allocator, nullptr, IID_PPV_ARGS(&command_list));
     hr = command_list->Close();
 
     //helper object to create a swap chain  
-    IDXGIFactory4 *factory = nullptr;
+    IDXGIFactory4* factory = nullptr;
     hr = CreateDXGIFactory1(IID_PPV_ARGS(&factory)); //AUN NO AGREGADO
 
     //create swap chain
@@ -215,27 +218,27 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
     swap_chain_desc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
     swap_chain_desc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
     swap_chain_desc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;
-    swap_chain_desc.OutputWindow = hwnd;  
+    swap_chain_desc.OutputWindow = hwnd;
     swap_chain_desc.SampleDesc.Count = 1;
     swap_chain_desc.Windowed = TRUE;
 
-    IDXGISwapChain *temp_swap_chain = nullptr;
+    IDXGISwapChain* temp_swap_chain = nullptr;
     hr = factory->CreateSwapChain(command_queue, &swap_chain_desc, &temp_swap_chain);
 
     //cast the swap chain to IDXGISwapChain3 to leverage the latest features
-    IDXGISwapChain3 *swap_chain = {};
+    IDXGISwapChain3* swap_chain = {};
     hr = temp_swap_chain->QueryInterface(IID_PPV_ARGS(&swap_chain));
     temp_swap_chain->Release();
     temp_swap_chain = nullptr;
-    
+
     //memory descriptor heap to store render target views(RTV). Descriptor describes how to interperate resource memory.
-    ID3D12DescriptorHeap *rtv_heap = nullptr;
+    ID3D12DescriptorHeap* rtv_heap = nullptr;
     D3D12_DESCRIPTOR_HEAP_DESC rtv_heap_desc = {};
     rtv_heap_desc.NumDescriptors = 2;
     rtv_heap_desc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
     hr = device->CreateDescriptorHeap(&rtv_heap_desc, IID_PPV_ARGS(&rtv_heap));
 
-    ID3D12Resource *render_targets[2]; //NO AGREGADO
+    ID3D12Resource* render_targets[2]; //NO AGREGADO
 
     UINT rtv_increment_size = device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
     {
@@ -247,15 +250,15 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
             rtv_handle.ptr += rtv_increment_size;
         }
     }
-    ////////////////////////
+
     //memory descriptor heap to store render target views(DSV). Descriptor describes how to interperate resource memory.
-    ID3D12DescriptorHeap *dsv_heap = nullptr;
+    ID3D12DescriptorHeap* dsv_heap = nullptr;
     D3D12_DESCRIPTOR_HEAP_DESC dsv_heap_desc = {};
     dsv_heap_desc.NumDescriptors = 1;
     dsv_heap_desc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_DSV;
     hr = device->CreateDescriptorHeap(&dsv_heap_desc, IID_PPV_ARGS(&dsv_heap));
 
-    ID3D12Resource *depth_stencil_buffer = nullptr;
+    ID3D12Resource* depth_stencil_buffer = nullptr;
 
     UINT dsv_increment_size = device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_DSV);
     {
@@ -295,9 +298,9 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
         D3D12_CPU_DESCRIPTOR_HANDLE dsv_handle(dsv_heap->GetCPUDescriptorHandleForHeapStart());
         device->CreateDepthStencilView(depth_stencil_buffer, nullptr, dsv_handle);
     }
-
+    //NO AGREGADO
     //fence is used to synchronize the CPU with the GPU, so they don't touch the same memory at the same time
-    ID3D12Fence *fence = nullptr;
+    ID3D12Fence* fence = nullptr;
     UINT64 fence_value = 0;
     hr = device->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&fence));
 
@@ -305,23 +308,24 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 
     //Root signature is like have many object buffers and textures we want to use when drawing.
     //For our rotating triangle, we only need a single constant that is going to be our angle
-    D3D12_ROOT_PARAMETER root_parameters[1] = {};
+    D3D12_ROOT_PARAMETER root_parameters[1] = {}; //NO SE USA
     root_parameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_32BIT_CONSTANTS;
     root_parameters[0].Constants.Num32BitValues = 1;
     root_parameters[0].Constants.ShaderRegister = 0;
     root_parameters[0].Constants.RegisterSpace = 0;
-    root_parameters[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
+    root_parameters[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX; 
 
-    ID3D12RootSignature *root_signature = nullptr;
+    ID3D12RootSignature* root_signature = nullptr;
     D3D12_ROOT_SIGNATURE_DESC root_signature_desc = {};
     root_signature_desc.NumParameters = _countof(root_parameters);
     root_signature_desc.pParameters = root_parameters;
     root_signature_desc.NumStaticSamplers = 0;
     root_signature_desc.pStaticSamplers = nullptr;
     root_signature_desc.Flags = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
+    //NO SE USA
 
-    ID3DBlob *signature_blob = nullptr;
-    ID3DBlob *error_blob = nullptr;
+    ID3DBlob* signature_blob = nullptr;
+    ID3DBlob* error_blob = nullptr;
     hr = D3D12SerializeRootSignature(&root_signature_desc, D3D_ROOT_SIGNATURE_VERSION_1, &signature_blob, &error_blob);
     hr = device->CreateRootSignature(0, signature_blob->GetBufferPointer(), signature_blob->GetBufferSize(), IID_PPV_ARGS(&root_signature));
 
@@ -335,8 +339,8 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
     }
 
     //compile shaders
-    ID3DBlob *vertex_shader = nullptr;
-    ID3DBlob *pixel_shader = nullptr;
+    ID3DBlob* vertex_shader = nullptr;
+    ID3DBlob* pixel_shader = nullptr;
     hr = D3DCompileFromFile(L"shader.hlsl", nullptr, nullptr, "VSMain", "vs_5_0", 0, 0, &vertex_shader, nullptr);
     hr = D3DCompileFromFile(L"shader.hlsl", nullptr, nullptr, "PSMain", "ps_5_0", 0, 0, &pixel_shader, nullptr);
 
@@ -351,7 +355,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
     pso_desc.SampleMask = UINT_MAX;
     set_rasterizer_state(pso_desc.RasterizerState);
     set_depth_stencil_state(pso_desc.DepthStencilState);
-    
+
     D3D12_INPUT_ELEMENT_DESC input_elements[] = {
             {"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0},
             {"NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0},
@@ -368,7 +372,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
     pso_desc.SampleDesc.Count = 1;
     pso_desc.SampleDesc.Quality = 0;
 
-    ID3D12PipelineState *pipeline_state = nullptr;
+    ID3D12PipelineState* pipeline_state = nullptr;
     hr = device->CreateGraphicsPipelineState(&pso_desc, IID_PPV_ARGS(&pipeline_state));
 
     vertex_shader->Release();
@@ -376,11 +380,12 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
     pixel_shader->Release();
     pixel_shader = nullptr;
 
+    //Como lo lee el programa, se van a reutilizar asi que se deben referenciar en otro lado
     Model model = load_model_from_obj("rabbit.obj");
-    ID3D12Resource *vertex_buffer = nullptr; //fast. GPU access only
-    ID3D12Resource *vertex_buffer_upload = nullptr; //slow. CPU and GPU access
-    ID3D12Resource *index_buffer = nullptr; //fast. GPU access only
-    ID3D12Resource *index_buffer_upload = nullptr; //slow. CPU and GPU access
+    ID3D12Resource* vertex_buffer = nullptr; //fast. GPU access only
+    ID3D12Resource* vertex_buffer_upload = nullptr; //slow. CPU and GPU access
+    ID3D12Resource* index_buffer = nullptr; //fast. GPU access only
+    ID3D12Resource* index_buffer_upload = nullptr; //slow. CPU and GPU access
 
     //create vertex and index buffer
     {
@@ -416,7 +421,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
             &resource_desc,
             D3D12_RESOURCE_STATE_COMMON,
             nullptr,
-            IID_PPV_ARGS(&vertex_buffer)
+            IID_PPV_ARGS(&vertex_buffer) //.Get
         );
 
         hr = device->CreateCommittedResource(
@@ -447,16 +452,16 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
             nullptr,
             IID_PPV_ARGS(&index_buffer_upload)
         );
-
+        ////////////////////////////// Checar los bloques de arriba
         //copy data from CPU to the upload buffers
-        void *vertex_mapped_data = nullptr;
+        void* vertex_mapped_data = nullptr;
         hr = vertex_buffer_upload->Map(0, nullptr, &vertex_mapped_data);
-        memcpy(vertex_mapped_data, model.vertices.data(), sizeof(Vertex) *model.vertices.size());
+        memcpy(vertex_mapped_data, model.vertices.data(), sizeof(Vertex) * model.vertices.size());
         vertex_buffer_upload->Unmap(0, nullptr);
 
-        void *index_mapped_data = nullptr;
+        void* index_mapped_data = nullptr;
         hr = index_buffer_upload->Map(0, nullptr, &index_mapped_data);
-        memcpy(index_mapped_data, model.indicies.data(), sizeof(unsigned int) *model.indicies.size());
+        memcpy(index_mapped_data, model.indicies.data(), sizeof(unsigned int) * model.indicies.size());
         index_buffer_upload->Unmap(0, nullptr);
 
         //Record commands to copy the data from the upload buffer to the fast default buffer
@@ -494,7 +499,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 
         hr = command_list->Close();
 
-        ID3D12CommandList *command_lists[] = { command_list };
+        ID3D12CommandList* command_lists[] = { command_list };
         command_queue->ExecuteCommandLists(1, command_lists);
 
         // Wait on the CPU for the GPU frame to finish
@@ -507,7 +512,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
         }
     }
 
-    unsigned int triangle_angle = 0;
+    unsigned int triangle_angle = 0; //AUN NO AGREGADO
 
     bool running = true;
     while (running) {
@@ -561,7 +566,8 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 
         // Draw the triangle
         command_list->SetGraphicsRoot32BitConstant(0, triangle_angle, 0);
-        
+
+        //Va en el draw
         D3D12_VERTEX_BUFFER_VIEW vertex_buffer_view = {};
         vertex_buffer_view.BufferLocation = vertex_buffer->GetGPUVirtualAddress();
         vertex_buffer_view.StrideInBytes = sizeof(Vertex);
@@ -573,9 +579,10 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
         index_buffer_view.SizeInBytes = sizeof(unsigned int) * model.indicies.size();
         index_buffer_view.Format = DXGI_FORMAT_R32_UINT;
         command_list->IASetIndexBuffer(&index_buffer_view);
+       
 
         command_list->DrawIndexedInstanced(model.indicies.size(), 1, 0, 0, 0);
-
+        //
         {
             D3D12_RESOURCE_BARRIER barrier = {};
             barrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
@@ -589,7 +596,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 
         hr = command_list->Close();
 
-        ID3D12CommandList *command_lists[] = { command_list };
+        ID3D12CommandList* command_lists[] = { command_list };
         command_queue->ExecuteCommandLists(1, command_lists);
 
         hr = swap_chain->Present(1, 0);
@@ -606,3 +613,4 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
         triangle_angle++;
     }
 }
+
