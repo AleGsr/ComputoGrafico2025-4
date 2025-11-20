@@ -71,6 +71,7 @@ private:
 	void ThrowIfFailed(HRESULT hr);
 	void setupGeometry();
 	void setupShaders();
+	void setupFenceEvent();
 	void setupConstantBuffer();
 	void setupDevice();
 	void setupCommandQueue();
@@ -108,17 +109,16 @@ private:
 
 	ID3D12Fence* fence = nullptr;
 	UINT64 fence_value = 0;
+	HANDLE fence_event = CreateEvent(nullptr, FALSE, FALSE, nullptr);
 
-	Model model = load_model_from_obj("rabbit.obj");
+	ID3D12DescriptorHeap* dsv_heap = nullptr; //AGREGADO
 
-	//ID3D12Resource* vertex_buffer = nullptr; //fast. GPU access only
-	Microsoft::WRL::ComPtr<ID3D12Resource> vertex_buffer;
-	//ID3D12Resource* vertex_buffer_upload = nullptr; //slow. CPU and GPU access
-	Microsoft::WRL::ComPtr<ID3D12Resource> vertex_buffer_upload;
-	//ID3D12Resource* index_buffer = nullptr; //fast. GPU access only
-	Microsoft::WRL::ComPtr<ID3D12Resource> index_buffer;
-	ID3D12Resource* index_buffer_upload = nullptr; //slow. CPU and GPU access
-	Microsoft::WRL::ComPtr<ID3D12Resource> index_buffer_upload;
+	Model load_model_from_obj(const std::string& path) ;
+
+	Microsoft::WRL::ComPtr<ID3D12Resource> vertex_buffer;  //fast. GPU access only
+	Microsoft::WRL::ComPtr<ID3D12Resource> vertex_buffer_upload;//slow. CPU and GPU access
+	Microsoft::WRL::ComPtr<ID3D12Resource> index_buffer;  //fast. GPU access only
+	Microsoft::WRL::ComPtr<ID3D12Resource> index_buffer_upload; //slow. CPU and GPU access
 
 
 

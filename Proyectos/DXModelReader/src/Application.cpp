@@ -95,20 +95,130 @@ HWND Application::GetWindowNativeHandler() const
 
 void Application::setupGeometry()
 {
-	//hr algunos
-	//rd
+	Model model = load_model_from_obj("rabbit.obj");
+	//heap properties
+	D3D12_HEAP_PROPERTIES heap_properties = {};
+	heap_properties.Type = D3D12_HEAP_TYPE_DEFAULT;
+	heap_properties.CPUPageProperty = D3D12_CPU_PAGE_PROPERTY_UNKNOWN;
+	heap_properties.MemoryPoolPreference = D3D12_MEMORY_POOL_UNKNOWN;
+	heap_properties.CreationNodeMask = 1;
+	heap_properties.VisibleNodeMask = 1;
 
-	std::vector<float> geometry{
-		// X    Y    Z     W
-		-1.0f,  1.0, 0.0f, 1.0f,  //vertice 1
-		-1.0f, -1.0, 0.0f, 1.0f,  //vertice 2
-		 1.0f, -1.0, 0.0f, 1.0f,  //vertice 3
+	D3D12_HEAP_PROPERTIES heap_properties_upload = heap_properties;
+	heap_properties_upload.Type = D3D12_HEAP_TYPE_UPLOAD;
 
-		1.0f, 0.0f, 0.0f, 1.0f,   //rojo
-		0.0f, 1.0f, 0.0f, 1.0f,   //verde
-		 0.0f, 0.0f, 1.0f, 1.0f   //azul
-	};
+	//resource description
+	D3D12_RESOURCE_DESC resource_desc = {};
+	resource_desc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
+	resource_desc.Alignment = 0;
+	resource_desc.Width = sizeof(Vertex) * model.vertices.size();
+	resource_desc.Height = 1;
+	resource_desc.DepthOrArraySize = 1;
+	resource_desc.MipLevels = 1;
+	resource_desc.Format = DXGI_FORMAT_UNKNOWN;
+	resource_desc.SampleDesc.Count = 1;
+	resource_desc.SampleDesc.Quality = 0;
+	resource_desc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
+	resource_desc.Flags = D3D12_RESOURCE_FLAG_NONE;
+
+	//vertex
+	device->CreateCommittedResource(
+		&heap_properties,
+		D3D12_HEAP_FLAG_NONE,
+		&resource_desc,
+		D3D12_RESOURCE_STATE_COMMON,
+		nullptr,
+		IID_PPV_ARGS(&vertex_buffer) //.Get
+	);
+
+	device->CreateCommittedResource(
+		&heap_properties_upload,
+		D3D12_HEAP_FLAG_NONE,
+		&resource_desc,
+		D3D12_RESOURCE_STATE_GENERIC_READ,
+		nullptr,
+		IID_PPV_ARGS(&vertex_buffer_upload)
+	);
+
+	//index
+	resource_desc.Width = sizeof(unsigned int) * model.indicies.size();
+	device->CreateCommittedResource(
+		&heap_properties,
+		D3D12_HEAP_FLAG_NONE,
+		&resource_desc,
+		D3D12_RESOURCE_STATE_COMMON,
+		nullptr,
+		IID_PPV_ARGS(&index_buffer)
+	);
+
+	device->CreateCommittedResource(
+		&heap_properties_upload,
+		D3D12_HEAP_FLAG_NONE,
+		&resource_desc,
+		D3D12_RESOURCE_STATE_GENERIC_READ,
+		nullptr,
+		IID_PPV_ARGS(&index_buffer_upload)
+	);
+	////////////////////////////// Checar los bloques de arriba
+	//copy data from CPU to the upload buffers
+	void* vertex_mapped_data = nullptr;
+	vertex_buffer_upload->Map(0, nullptr, &vertex_mapped_data);
+	memcpy(vertex_mapped_data, model.vertices.data(), sizeof(Vertex) * model.vertices.size());
+	vertex_buffer_upload->Unmap(0, nullptr);
+
+	void* index_mapped_data = nullptr;
+	index_buffer_upload->Map(0, nullptr, &index_mapped_data);
+	memcpy(index_mapped_data, model.indicies.data(), sizeof(unsigned int) * model.indicies.size());
+	index_buffer_upload->Unmap(0, nullptr);
+
+	//Record commands to copy the data from the upload buffer to the fast default buffer
+	commandAllocator->Reset();
+	commandList->Reset(commandAllocator.Get(), nullptr); //Ultima linea
+
+	D3D12_RESOURCE_BARRIER barrier[2] = {}; //Barrier sincroniza 
+	barrier[0].Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
+	barrier[0].Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
+	barrier[0].Transition.pResource = vertex_buffer.Get();
+	barrier[0].Transition.StateBefore = D3D12_RESOURCE_STATE_COMMON;
+	barrier[0].Transition.StateAfter = D3D12_RESOURCE_STATE_COPY_DEST;
+	barrier[0].Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
+
+	barrier[1].Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
+	barrier[1].Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
+	barrier[1].Transition.pResource = index_buffer.Get();
+	barrier[1].Transition.StateBefore = D3D12_RESOURCE_STATE_COMMON;
+	barrier[1].Transition.StateAfter = D3D12_RESOURCE_STATE_COPY_DEST;
+	barrier[1].Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
+
+	commandList->ResourceBarrier(2, barrier);
+
+	//copy the data from upload to the fast default buffer
+	commandList->CopyResource(vertex_buffer.Get(), vertex_buffer_upload.Get());
+	commandList->CopyResource(index_buffer.Get(), index_buffer_upload.Get());
+
+	barrier[0].Transition.StateBefore = D3D12_RESOURCE_STATE_COPY_DEST;
+	barrier[0].Transition.StateAfter = D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER;
+
+	barrier[1].Transition.StateBefore = D3D12_RESOURCE_STATE_COPY_DEST;
+	barrier[1].Transition.StateAfter = D3D12_RESOURCE_STATE_INDEX_BUFFER;
+
+	commandList->ResourceBarrier(2, barrier);
+
+	commandList->Close();
+
+	ID3D12CommandList* command_lists[] = { commandList.Get()};
+	commandQueue->ExecuteCommandLists(1, command_lists);
+
+	// Wait on the CPU for the GPU frame to finish
+	const UINT64 current_fence_value = ++fence_value;
+	commandQueue->Signal(fence, current_fence_value);
+
+	if (fence->GetCompletedValue() < current_fence_value) {
+		fence->SetEventOnCompletion(current_fence_value, fence_event);
+		WaitForSingleObject(fence_event, INFINITE);
+	}
 }
+
 
 void Application::keyCallback(int key, int scancode, int action, int mods)
 {
@@ -166,15 +276,11 @@ void Application::setupShaders()
 	pixel_shader = nullptr;
 
 
-	//-AGREGADO
-	//Model model = load_model_from_obj("rabbit.obj");
-	ID3D12Resource* vertex_buffer = nullptr; //fast. GPU access only
-	ID3D12Resource* vertex_buffer_upload = nullptr; //slow. CPU and GPU access
-	ID3D12Resource* index_buffer = nullptr; //fast. GPU access only
-	ID3D12Resource* index_buffer_upload = nullptr; //slow. CPU and GPU access
-	//AGREGADO-
+}
 
-
+void Application::setupFenceEvent()
+{
+	device->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&fence));
 }
 
 
@@ -388,6 +494,10 @@ void Application::draw()
 	float clearColor[] = { 0.0f, 0.2f, 0.4f, 1.0f };
 	commandList->ClearRenderTargetView(rtvHandle, clearColor, 0, nullptr);
 
+	//AÑADIDO
+	D3D12_CPU_DESCRIPTOR_HANDLE dsv_handle = dsv_heap->GetCPUDescriptorHandleForHeapStart();
+	commandList->ClearDepthStencilView(dsv_handle, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
+
 	// Set viewport and scissor
 	D3D12_VIEWPORT viewport = { 0.0f, 0.0f, static_cast<float>(WINDOW_WIDTH), static_cast<float>(WINDOW_HEIGHT), 0.0f, 1.0f };
 	D3D12_RECT scissor_rect = { 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT };
@@ -399,11 +509,11 @@ void Application::draw()
 	commandList->SetPipelineState(pipelineState.Get());  //Shaders, selecciona los shaders que se van a usar
 
 
-	//Copiar los datos de la estructura al constant bugffer  //POSIBLE LINEA 451-464
-	memcpy(mappedMemory, &sceneConstants, sizeof(SceneConstants));
+	////Copiar los datos de la estructura al constant bugffer  //POSIBLE LINEA 451-464
+	//memcpy(mappedMemory, &sceneConstants, sizeof(SceneConstants));
 
-	commandList->SetGraphicsRootConstantBufferView(0, constantBuffer->GetGPUVirtualAddress());
-	///---------------
+	//commandList->SetGraphicsRootConstantBufferView(0, constantBuffer->GetGPUVirtualAddress());
+	/////---------------
 
 
 	D3D12_VERTEX_BUFFER_VIEW vertex_buffer_view = {};
@@ -414,17 +524,12 @@ void Application::draw()
 
 	D3D12_INDEX_BUFFER_VIEW index_buffer_view = {};
 	index_buffer_view.BufferLocation = index_buffer->GetGPUVirtualAddress();
-	index_buffer_view.SizeInBytes = sizeof(unsigned int) * model.indicies.size();
+	index_buffer_view.SizeInBytes = sizeof(unsigned int) * load_model_from_obj("rabbit.obj").indicies.size();
 	index_buffer_view.Format = DXGI_FORMAT_R32_UINT;
 	commandList->IASetIndexBuffer(&index_buffer_view);
 
 
-	commandList->DrawIndexedInstanced(model.indicies.size(), 1, 0, 0, 0);
-
-	// Draw the triangle
-	//commandList->DrawInstanced(3, 1, 0, 0);
-	/*commandList->Reset(command_allocator, nullptr);*/
-
+	commandList->DrawIndexedInstanced(load_model_from_obj("rabbit.obj").indicies.size(), 1, 0, 0, 0);
 	{
 		D3D12_RESOURCE_BARRIER barrier = {};
 		barrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
@@ -434,53 +539,12 @@ void Application::draw()
 		barrier.Transition.StateAfter = D3D12_RESOURCE_STATE_PRESENT;
 		barrier.Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
 		commandList->ResourceBarrier(1, &barrier);
-		//D3D12_RESOURCE_BARRIER barrier[2] = {};
-		//barrier[0].Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
-		//barrier[0].Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
-		///*barrier[0].Transition.pResource = vertex_buffer;*/
-		//barrier[0].Transition.StateBefore = D3D12_RESOURCE_STATE_COMMON;
-		//barrier[0].Transition.StateAfter = D3D12_RESOURCE_STATE_COPY_DEST;
-		//barrier[0].Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
-
-		//barrier[1].Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
-		//barrier[1].Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
-		///*barrier[1].Transition.pResource = index_buffer;*/
-		//barrier[1].Transition.StateBefore = D3D12_RESOURCE_STATE_COMMON;
-		//barrier[1].Transition.StateAfter = D3D12_RESOURCE_STATE_COPY_DEST;
-		//barrier[1].Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
-
-		/*commandList->ResourceBarrier(2, barrier);*/
 	}
-
-	//AGREGADO
-	//copy the data from upload to the fast default buffer
-	/*command_list->CopyResource(vertex_buffer, vertex_buffer_upload);
-	command_list->CopyResource(index_buffer, index_buffer_upload);
-
-	barrier[0].Transition.StateBefore = D3D12_RESOURCE_STATE_COPY_DEST;
-	barrier[0].Transition.StateAfter = D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER;
-
-	barrier[1].Transition.StateBefore = D3D12_RESOURCE_STATE_COPY_DEST;
-	barrier[1].Transition.StateAfter = D3D12_RESOURCE_STATE_INDEX_BUFFER;*/
-	//---------------------
-
-	/*command_list->ResourceBarrier(2, barrier);*/
 
 	h = commandList->Close();
 
 	ID3D12CommandList* commandLists[] = { commandList.Get() };
 	commandQueue->ExecuteCommandLists(1, commandLists);
-
-	//AGREGADO
-	// Wait on the CPU for the GPU frame to finish
-	/*const UINT64 current_fence_value = ++fence_value;
-	hr = command_queue->Signal(fence, current_fence_value);
-
-	if (fence->GetCompletedValue() < current_fence_value) {
-		hr = fence->SetEventOnCompletion(current_fence_value, fence_event);
-		WaitForSingleObject(fence_event, INFINITE);
-	}*/
-	//---------------------
 
 	h = swapChain->Present(1, 0); //NO está agregado en DXModel
 
@@ -488,11 +552,12 @@ void Application::draw()
 
 void Application::setup()
 {
-	setupGeometry();
 	//Inicializa DirectX 12
 	// Crear el DXGI Factory		
 	ThrowIfFailed(CreateDXGIFactory1(IID_PPV_ARGS(&factory)), "Error creating Factory");
 	setupDevice();
+	setupGeometry();
+
 	setupCommandQueue();
 	setupCommandAllocator();
 	setupCommandList();
@@ -504,12 +569,13 @@ void Application::setup()
 	setupConstantBuffer();
 }
 
-Model load_model_from_obj(const std::string& path) {
+Model Application:: load_model_from_obj(const std::string& path) {
 	std::ifstream file(path);  // Open the file
 
 	if (!file.is_open()) {
 		return {};
 	}
+
 
 	Model model;
 	std::vector<DirectX::XMFLOAT3> temp_positions;

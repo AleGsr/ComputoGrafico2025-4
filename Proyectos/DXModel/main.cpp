@@ -466,9 +466,9 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 
         //Record commands to copy the data from the upload buffer to the fast default buffer
         hr = command_allocator->Reset();
-        hr = command_list->Reset(command_allocator, nullptr);
+        hr = command_list->Reset(command_allocator, nullptr); //Ultima linea
 
-        D3D12_RESOURCE_BARRIER barrier[2] = {};
+        D3D12_RESOURCE_BARRIER barrier[2] = {}; //Barrier sincroniza 
         barrier[0].Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
         barrier[0].Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
         barrier[0].Transition.pResource = vertex_buffer;
