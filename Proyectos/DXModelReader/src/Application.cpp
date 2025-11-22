@@ -95,7 +95,7 @@ HWND Application::GetWindowNativeHandler() const
 
 void Application::setupGeometry()
 {
-	Model model = load_model_from_obj("rabbit.obj");
+	Model model = load_model_from_obj(modelName);
 	//heap properties
 	D3D12_HEAP_PROPERTIES heap_properties = {};
 	heap_properties.Type = D3D12_HEAP_TYPE_DEFAULT;
@@ -519,17 +519,17 @@ void Application::draw()
 	D3D12_VERTEX_BUFFER_VIEW vertex_buffer_view = {};
 	vertex_buffer_view.BufferLocation = vertex_buffer->GetGPUVirtualAddress();
 	vertex_buffer_view.StrideInBytes = sizeof(Vertex);
-	vertex_buffer_view.SizeInBytes = sizeof(Vertex) * model.vertices.size();
+	vertex_buffer_view.SizeInBytes = sizeof(Vertex) * load_model_from_obj(modelName).vertices.size();
 	commandList->IASetVertexBuffers(0, 1, &vertex_buffer_view);
 
 	D3D12_INDEX_BUFFER_VIEW index_buffer_view = {};
 	index_buffer_view.BufferLocation = index_buffer->GetGPUVirtualAddress();
-	index_buffer_view.SizeInBytes = sizeof(unsigned int) * load_model_from_obj("rabbit.obj").indicies.size();
+	index_buffer_view.SizeInBytes = sizeof(unsigned int) * load_model_from_obj(modelName).indicies.size();
 	index_buffer_view.Format = DXGI_FORMAT_R32_UINT;
 	commandList->IASetIndexBuffer(&index_buffer_view);
 
 
-	commandList->DrawIndexedInstanced(load_model_from_obj("rabbit.obj").indicies.size(), 1, 0, 0, 0);
+	commandList->DrawIndexedInstanced(load_model_from_obj(modelName).indicies.size(), 1, 0, 0, 0);
 	{
 		D3D12_RESOURCE_BARRIER barrier = {};
 		barrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
@@ -556,11 +556,14 @@ void Application::setup()
 	// Crear el DXGI Factory		
 	ThrowIfFailed(CreateDXGIFactory1(IID_PPV_ARGS(&factory)), "Error creating Factory");
 	setupDevice();
-	setupGeometry();
 
 	setupCommandQueue();
 	setupCommandAllocator();
 	setupCommandList();
+
+	setupFenceEvent();
+
+	setupGeometry();
 	setupSwapChain();
 	setupDescriptorHeap();
 	setupRenderTargetView();

@@ -114,6 +114,7 @@ private:
 	ID3D12DescriptorHeap* dsv_heap = nullptr; //AGREGADO
 
 	Model load_model_from_obj(const std::string& path) ;
+	std::string modelName = "rabbit.obj";
 
 	Microsoft::WRL::ComPtr<ID3D12Resource> vertex_buffer;  //fast. GPU access only
 	Microsoft::WRL::ComPtr<ID3D12Resource> vertex_buffer_upload;//slow. CPU and GPU access
