@@ -3,21 +3,20 @@ struct PSInput {
     float3 color : COLOR;
 };
 
+cbuffer SceneConstants : register(b0) {
+    
+    float4x4 model;
+    float4x4 view; 
+    float4x4 projection; 
 
-cbuffer SceneConstants : register(b0)
-{
-    float4x4 model; //4x4 flotantes = 64 bytes
-    float4x4 view; //4x4 flotantes = 64 bytes
-    float4x4 projection; //4x4 flotantes = 64 bytes
-
-
-	// Parametros para la matriz de Vista (look At)
-    float4 eye; //16 bytes
-    float4 center; //16 bytes
-    float4 up; //16 bytes
+   float4 eye;
+   float4 center;
+   float4 up;
+    
     uint angle;
-    float3 padding;
-}
+	
+    float3 padding; 
+};
 
 
 // Vertex Shader
@@ -35,8 +34,8 @@ PSInput VSMain(unsigned int index : SV_VertexID) {
 	    float3(0.0f, 1.0f, 0.0f),
 	    float3(0.0f, 0.0f, 1.0f)
     };
-    
     float angle = 0;
+    
     float2 input_pos = positions[index];
     
     // Compute the rotation matrix
@@ -45,25 +44,19 @@ PSInput VSMain(unsigned int index : SV_VertexID) {
     float cosTheta = cos(angle * rotation_speed);
     float sinTheta = sin(angle * rotation_speed);
     
-    
     float2 rotated_pos;
     rotated_pos.x = input_pos.x * cosTheta - input_pos.y * sinTheta;
     rotated_pos.y = input_pos.x * sinTheta + input_pos.y * cosTheta;
     
-    
-    
-    
-    
-
-    //float4 localPos = float4 (rotated_pos.xy, 0.0f, 1.0f);
-    //float4 worldPos = mul(model, localPos);
+    float4 localPos = float4(rotated_pos.xy, 0.0f, 1.0f);
+    float4 worldPos = mul(model, localPos);
     //float4 viewPos = mul(view, worldPos);
     //float4 clipPos = mul(projection, viewPos);
     
     
-    
-
-    output.position = mul(projection, mul(view, mul(model, float4(rotated_pos.xy, 0.0f, 1.0f))));
+    //Hacerlo con projection * view * model
+    //output.position = mul(projection, mul(view, mul(model, float4(rotated_pos.xy, 0.0f, 1.0f))));
+    output.position = localPos;
     output.color = colors[index];
     return output;
 }
