@@ -459,17 +459,16 @@ void Application::update() {
 	sceneConstants.projection = XMMatrixPerspectiveFovLH(XMConvertToRadians(45.0f), aspect, 0.1f, 1000.0f); // Proyección
 
 	// Modelo: rotación alrededor del eje Y sin angulo variable
-	XMVECTOR axisY = XMVectorSet(0.0f, 1.0f, 0.0f, 1.0f); // Eje Y
 	XMVECTOR axisX = XMVectorSet(1.0f, 0.0f, 0.0f, 1.0f); // Eje X
-	float angleRad = XMConvertToRadians((float)(sceneConstants.triangleAngle % 360)); // Ángulo en radianes
-    sceneConstants.model = XMMatrixRotationAxis(axisY,angleRad) * XMConvertToRadians(sceneConstants.triangleAngle);
+	XMVECTOR axisY = XMVectorSet(0.0f, 1.0f, 0.0f, 1.0f); // Eje Y
+	float angleRadX = XMConvertToRadians((float)(moveVertical)); // Ángulo en radianes
+	float angleRadY = XMConvertToRadians((float)(moveHorizontal)); // Ángulo en radianes
+    sceneConstants.model = XMMatrixRotationAxis(axisX,angleRadX) * XMMatrixRotationAxis(axisY, angleRadY);
+
+
+
 
     memcpy(mappedMemory, &sceneConstants, sizeof(SceneConstants));// Sizeof es la cantidad de bits a copiar
-
-
-
-
-
 }
 
 void Application::draw() {

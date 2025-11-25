@@ -15,16 +15,16 @@
       "RelativeMoniker": "D:0:0:{F16C06B8-3284-4BC8-9446-322729A98012}|DXModelReader\\DXModelReader.vcxproj|solutionrelative:DXModelReader\\include\\Application.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{F16C06B8-3284-4BC8-9446-322729A98012}|DXModelReader\\DXModelReader.vcxproj|C:\\Users\\Estudiante\\Documents\\Alejandra\\ComputoGrafico2025-4\\Proyectos\\DXModelReader\\src\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{F16C06B8-3284-4BC8-9446-322729A98012}|DXModelReader\\DXModelReader.vcxproj|solutionrelative:DXModelReader\\src\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{C7AB1E14-92A7-49AA-995D-CCB4207A0A5A}|Application\\Application.vcxproj|C:\\Users\\Estudiante\\Documents\\Alejandra\\ComputoGrafico2025-4\\Proyectos\\Application\\include\\Application.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{C7AB1E14-92A7-49AA-995D-CCB4207A0A5A}|Application\\Application.vcxproj|solutionrelative:Application\\include\\Application.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{C7AB1E14-92A7-49AA-995D-CCB4207A0A5A}|Application\\Application.vcxproj|C:\\Users\\Estudiante\\Documents\\Alejandra\\ComputoGrafico2025-4\\Proyectos\\Application\\src\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{C7AB1E14-92A7-49AA-995D-CCB4207A0A5A}|Application\\Application.vcxproj|solutionrelative:Application\\src\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{F16C06B8-3284-4BC8-9446-322729A98012}|DXModelReader\\DXModelReader.vcxproj|C:\\Users\\Estudiante\\Documents\\Alejandra\\ComputoGrafico2025-4\\Proyectos\\DXModelReader\\src\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{F16C06B8-3284-4BC8-9446-322729A98012}|DXModelReader\\DXModelReader.vcxproj|solutionrelative:DXModelReader\\src\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     }
   ],
   "DocumentGroupContainers": [
@@ -33,12 +33,12 @@
       "VerticalTabListWidth": 256,
       "DocumentGroups": [
         {
-          "DockedWidth": 154,
+          "DockedWidth": 94,
           "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 4,
               "Title": "Application.h",
               "DocumentMoniker": "C:\\Users\\Estudiante\\Documents\\Alejandra\\ComputoGrafico2025-4\\Proyectos\\Application\\include\\Application.h",
               "RelativeDocumentMoniker": "Application\\include\\Application.h",
@@ -57,14 +57,14 @@
               "RelativeDocumentMoniker": "Application\\src\\Application.cpp",
               "ToolTip": "C:\\Users\\Estudiante\\Documents\\Alejandra\\ComputoGrafico2025-4\\Proyectos\\Application\\src\\Application.cpp",
               "RelativeToolTip": "Application\\src\\Application.cpp",
-              "ViewState": "AgIAABMAAAAAAAAAAAAWwCcAAAASAAAAAAAAAA==",
+              "ViewState": "AgIAABMAAAAAAAAAAAAWwCMAAABGAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2025-11-25T01:27:48.096Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 5,
               "Title": "main.cpp",
               "DocumentMoniker": "C:\\Users\\Estudiante\\Documents\\Alejandra\\ComputoGrafico2025-4\\Proyectos\\Application\\src\\main.cpp",
               "RelativeDocumentMoniker": "Application\\src\\main.cpp",
@@ -78,22 +78,9 @@
           ]
         },
         {
-          "DockedWidth": 325,
-          "SelectedChildIndex": 2,
+          "DockedWidth": 385,
+          "SelectedChildIndex": 1,
           "Children": [
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "main.cpp",
-              "DocumentMoniker": "C:\\Users\\Estudiante\\Documents\\Alejandra\\ComputoGrafico2025-4\\Proyectos\\DXModelReader\\src\\main.cpp",
-              "RelativeDocumentMoniker": "DXModelReader\\src\\main.cpp",
-              "ToolTip": "C:\\Users\\Estudiante\\Documents\\Alejandra\\ComputoGrafico2025-4\\Proyectos\\DXModelReader\\src\\main.cpp",
-              "RelativeToolTip": "DXModelReader\\src\\main.cpp",
-              "ViewState": "AgIAAA8AAAAAAAAAAAAAACUAAAAMAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2025-11-24T03:23:07.024Z",
-              "EditorCaption": ""
-            },
             {
               "$type": "Document",
               "DocumentIndex": 2,
@@ -102,7 +89,7 @@
               "RelativeDocumentMoniker": "DXModelReader\\include\\Application.h",
               "ToolTip": "C:\\Users\\Estudiante\\Documents\\Alejandra\\ComputoGrafico2025-4\\Proyectos\\DXModelReader\\include\\Application.h",
               "RelativeToolTip": "DXModelReader\\include\\Application.h",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAIkAAAAWAAAAAAAAAA==",
+              "ViewState": "AgIAAB0AAAAAAAAAAAAAACcAAAAZAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
               "WhenOpened": "2025-11-24T03:23:08.962Z",
               "EditorCaption": ""
@@ -115,9 +102,22 @@
               "RelativeDocumentMoniker": "DXModelReader\\src\\Application.cpp",
               "ToolTip": "C:\\Users\\Estudiante\\Documents\\Alejandra\\ComputoGrafico2025-4\\Proyectos\\DXModelReader\\src\\Application.cpp",
               "RelativeToolTip": "DXModelReader\\src\\Application.cpp",
-              "ViewState": "AgIAALkBAAAAAAAAAAAWwMUBAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAALoBAAAAAAAAAAAWwNEBAABpAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2025-11-25T01:27:31.519Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "main.cpp",
+              "DocumentMoniker": "C:\\Users\\Estudiante\\Documents\\Alejandra\\ComputoGrafico2025-4\\Proyectos\\DXModelReader\\src\\main.cpp",
+              "RelativeDocumentMoniker": "DXModelReader\\src\\main.cpp",
+              "ToolTip": "C:\\Users\\Estudiante\\Documents\\Alejandra\\ComputoGrafico2025-4\\Proyectos\\DXModelReader\\src\\main.cpp",
+              "RelativeToolTip": "DXModelReader\\src\\main.cpp",
+              "ViewState": "AgIAAA8AAAAAAAAAAAAAACUAAAAMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2025-11-24T03:23:07.024Z",
               "EditorCaption": ""
             }
           ]
