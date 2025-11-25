@@ -24,7 +24,7 @@ void Application::update()
 	move += 0.1f * direction;
 	center = glm::vec3(0.01f, 0.01f, 0.01f);
 	//eye = glm::vec3(-2.0f + cos(time), 1.0f + sin(time), 2.0f + cos(time));
-	eye = glm::vec3(0.0f , 0.0f , 3.0f);
+	eye = glm::vec3(0.0f, 0.0f, 3.0f);
 
 	camera = glm::lookAt(eye, center, glm::vec3(0.0f, 1.0f, 0.0f));
 	//std::cout << move <<" , " << direction << std::endl;
@@ -37,7 +37,7 @@ void Application::update()
 	glm::mat4 rotationY = glm::rotate(glm::mat4(1.0), glm::radians(moveHorizontal), glm::vec3(0.0f, 1.0f, 0.0f));
 	glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3((1.0f, 1.0f, 1.0f) * zoom));
 
-	model = rotationX* rotationY * scale;
+	model = rotationX * rotationY * scale;
 }
 
 void Application::draw()
@@ -60,7 +60,7 @@ void Application::draw()
 	glUniformMatrix4fv(ids["model"], 1, GL_FALSE, &model[0][0]);
 	glUniformMatrix4fv(ids["camera"], 1, GL_FALSE, &camera[0][0]);
 	glUniformMatrix4fv(ids["projection"], 1, GL_FALSE, &projection[0][0]);
-	
+
 
 
 
@@ -151,98 +151,98 @@ void Application::setUpCube()
 		-1.0f,  1.0f, 1.0f, 1.0f, //VFrontal 5
 		 1.0f, -1.0f, 1.0f, 1.0f, //VFrontal 6
 
-		//Cara Atras
-		-1.0f, -1.0f, -1.0f, 1.0f,  //VAtras 1
-		-1.0f,  1.0f, -1.0f, 1.0f,  //VAtras 2
-		 1.0f, -1.0f, -1.0f, 1.0f,  //VAtras 3
-		 1.0f,  1.0f, -1.0f, 1.0f,  //VAtras 4
-		-1.0f,  1.0f, -1.0f, 1.0f,  //VAtras 5
-		 1.0f, -1.0f, -1.0f, 1.0f,  //VAtras 6
+		 //Cara Atras
+		 -1.0f, -1.0f, -1.0f, 1.0f,  //VAtras 1
+		 -1.0f,  1.0f, -1.0f, 1.0f,  //VAtras 2
+		  1.0f, -1.0f, -1.0f, 1.0f,  //VAtras 3
+		  1.0f,  1.0f, -1.0f, 1.0f,  //VAtras 4
+		 -1.0f,  1.0f, -1.0f, 1.0f,  //VAtras 5
+		  1.0f, -1.0f, -1.0f, 1.0f,  //VAtras 6
 
-		//Cara Arriba
-		-1.0f, 1.0f,  1.0f, 1.0f, //VArriba 1
-		-1.0f, 1.0f, -1.0f, 1.0f, //VArriba 2
-		 1.0f, 1.0f,  1.0f, 1.0f, //VArriba 3
-		 1.0f, 1.0f, -1.0f, 1.0f, //VArriba 4
-		-1.0f, 1.0f, -1.0f, 1.0f, //VArriba 5
-		 1.0f, 1.0f,  1.0f, 1.0f, //VArriba 6
+		  //Cara Arriba
+		  -1.0f, 1.0f,  1.0f, 1.0f, //VArriba 1
+		  -1.0f, 1.0f, -1.0f, 1.0f, //VArriba 2
+		   1.0f, 1.0f,  1.0f, 1.0f, //VArriba 3
+		   1.0f, 1.0f, -1.0f, 1.0f, //VArriba 4
+		  -1.0f, 1.0f, -1.0f, 1.0f, //VArriba 5
+		   1.0f, 1.0f,  1.0f, 1.0f, //VArriba 6
 
-		//Cara Abajo
-		-1.0f, -1.0f,  1.0f, 1.0f, //VAbajo 1
-		-1.0f, -1.0f, -1.0f, 1.0f, //VAbajo 2
-		 1.0f, -1.0f,  1.0f, 1.0f, //VAbajo 3
-		 1.0f, -1.0f, -1.0f, 1.0f, //VAbajo 4
-		-1.0f, -1.0f, -1.0f, 1.0f, //VAbajo 5
-		 1.0f, -1.0f,  1.0f, 1.0f, //VAbajo 6
+		   //Cara Abajo
+		   -1.0f, -1.0f,  1.0f, 1.0f, //VAbajo 1
+		   -1.0f, -1.0f, -1.0f, 1.0f, //VAbajo 2
+			1.0f, -1.0f,  1.0f, 1.0f, //VAbajo 3
+			1.0f, -1.0f, -1.0f, 1.0f, //VAbajo 4
+		   -1.0f, -1.0f, -1.0f, 1.0f, //VAbajo 5
+			1.0f, -1.0f,  1.0f, 1.0f, //VAbajo 6
 
-		//Cara Derecha
-		1.0f, -1.0f,  1.0f, 1.0f, //VDerecha 1
-		1.0f,  1.0f,  1.0f, 1.0f, //VDerecha 2
-		1.0f, -1.0f, -1.0f, 1.0f, //VDerecha 3
-		1.0f,  1.0f, -1.0f, 1.0f, //VDerecha 4
-		1.0f,  1.0f,  1.0f, 1.0f, //VDerecha 5
-		1.0f, -1.0f, -1.0f, 1.0f, //VDerecha 3
+			//Cara Derecha
+			1.0f, -1.0f,  1.0f, 1.0f, //VDerecha 1
+			1.0f,  1.0f,  1.0f, 1.0f, //VDerecha 2
+			1.0f, -1.0f, -1.0f, 1.0f, //VDerecha 3
+			1.0f,  1.0f, -1.0f, 1.0f, //VDerecha 4
+			1.0f,  1.0f,  1.0f, 1.0f, //VDerecha 5
+			1.0f, -1.0f, -1.0f, 1.0f, //VDerecha 3
 
-		//Cara Izquierda
-		-1.0f, -1.0f,  1.0f, 1.0f, //VIzquierda 1
-		-1.0f,  1.0f,  1.0f, 1.0f, //VIzquierda 2
-		-1.0f, -1.0f, -1.0f, 1.0f, //VIzquierda 3
-		-1.0f,  1.0f, -1.0f, 1.0f, //VIzquierda 4
-		-1.0f,  1.0f,  1.0f, 1.0f, //VIzquierda 5
-		-1.0f, -1.0f, -1.0f, 1.0f, //VIzquierda 6
+			//Cara Izquierda
+			-1.0f, -1.0f,  1.0f, 1.0f, //VIzquierda 1
+			-1.0f,  1.0f,  1.0f, 1.0f, //VIzquierda 2
+			-1.0f, -1.0f, -1.0f, 1.0f, //VIzquierda 3
+			-1.0f,  1.0f, -1.0f, 1.0f, //VIzquierda 4
+			-1.0f,  1.0f,  1.0f, 1.0f, //VIzquierda 5
+			-1.0f, -1.0f, -1.0f, 1.0f, //VIzquierda 6
 
 
 
-		//COLORES
-		// R      G      B     A
+			//COLORES
+			// R      G      B     A
 
-		//Cara Frontal Rojo
-		  1.0f , 0.0f,  0.0f, 1.0f, //VF1
-		  1.0f , 0.0f,  0.0f, 1.0f, //VF2
-		  1.0f , 0.0f,  0.0f, 1.0f, //VF3
-		  1.0f , 0.0f,  0.0f, 1.0f, //VF4
-		  1.0f , 0.0f,  0.0f, 1.0f, //VF5
-		  1.0f , 0.0f,  0.0f, 1.0f, //VF6		
+			//Cara Frontal Rojo
+			  1.0f , 0.0f,  0.0f, 1.0f, //VF1
+			  1.0f , 0.0f,  0.0f, 1.0f, //VF2
+			  1.0f , 0.0f,  0.0f, 1.0f, //VF3
+			  1.0f , 0.0f,  0.0f, 1.0f, //VF4
+			  1.0f , 0.0f,  0.0f, 1.0f, //VF5
+			  1.0f , 0.0f,  0.0f, 1.0f, //VF6		
 
-		//Cara Atras Naranja/Morado
-		  1.0f , 0.0f,  1.0f, 1.0f, //VAt1
-		  1.0f , 0.0f,  1.0f, 1.0f, //VAt2
-		  1.0f , 0.0f,  1.0f, 1.0f, //VAt3
-		  1.0f , 0.0f,  1.0f, 1.0f, //VAt4
-		  1.0f , 0.0f,  1.0f, 1.0f, //VAt5
-		  1.0f , 0.0f,  1.0f, 1.0f, //VAt6
+			  //Cara Atras Naranja/Morado
+				1.0f , 0.0f,  1.0f, 1.0f, //VAt1
+				1.0f , 0.0f,  1.0f, 1.0f, //VAt2
+				1.0f , 0.0f,  1.0f, 1.0f, //VAt3
+				1.0f , 0.0f,  1.0f, 1.0f, //VAt4
+				1.0f , 0.0f,  1.0f, 1.0f, //VAt5
+				1.0f , 0.0f,  1.0f, 1.0f, //VAt6
 
-		//Cara Arriba Blanco
-		  0.0f , 1.0f,  1.0f, 1.0f, //VArr1
-		  0.0f , 1.0f,  1.0f, 1.0f, //VArr2
-		  0.0f , 1.0f,  1.0f, 1.0f, //VArr3
-		  0.0f , 1.0f,  1.0f, 1.0f, //VArr4
-		  0.0f , 1.0f,  1.0f, 1.0f, //VArr5
-		  0.0f , 1.0f,  1.0f, 1.0f, //VArr6		
+				//Cara Arriba Blanco
+				  0.0f , 1.0f,  1.0f, 1.0f, //VArr1
+				  0.0f , 1.0f,  1.0f, 1.0f, //VArr2
+				  0.0f , 1.0f,  1.0f, 1.0f, //VArr3
+				  0.0f , 1.0f,  1.0f, 1.0f, //VArr4
+				  0.0f , 1.0f,  1.0f, 1.0f, //VArr5
+				  0.0f , 1.0f,  1.0f, 1.0f, //VArr6		
 
-		//Cara Abajo Amarillo
-		  1.0f , 1.0f,  0.0f, 1.0f, //VAb1
-		  1.0f , 1.0f,  0.0f, 1.0f, //VAb2
-		  1.0f , 1.0f,  0.0f, 1.0f, //VAb3
-		  1.0f , 1.0f,  0.0f, 1.0f, //VAb4
-		  1.0f , 1.0f,  0.0f, 1.0f, //VAb5
-		  1.0f , 1.0f,  0.0f, 1.0f, //VAb6		
-		  
-		//Cara Derecha Azul
-		  0.0f , 0.0f,  1.0f, 1.0f, //VDer1
-		  0.0f , 0.0f,  1.0f, 1.0f, //VDer2
-		  0.0f , 0.0f,  1.0f, 1.0f, //VDer3
-		  0.0f , 0.0f,  1.0f, 1.0f, //VDer4
-		  0.0f , 0.0f,  1.0f, 1.0f, //VDer5
-		  0.0f , 0.0f,  1.0f, 1.0f, //VDer6		
-		  
-		//Cara Izquierda Verde
-		  0.0f , 1.0f,  0.0f, 1.0f, //VIz1
-		  0.0f , 1.0f,  0.0f, 1.0f, //VIz2
-		  0.0f , 1.0f,  0.0f, 1.0f, //VIz3
-		  0.0f , 1.0f,  0.0f, 1.0f, //VIz4
-		  0.0f , 1.0f,  0.0f, 1.0f, //VIz5
-		  0.0f , 1.0f,  0.0f, 1.0f, //VIz6
+				  //Cara Abajo Amarillo
+					1.0f , 1.0f,  0.0f, 1.0f, //VAb1
+					1.0f , 1.0f,  0.0f, 1.0f, //VAb2
+					1.0f , 1.0f,  0.0f, 1.0f, //VAb3
+					1.0f , 1.0f,  0.0f, 1.0f, //VAb4
+					1.0f , 1.0f,  0.0f, 1.0f, //VAb5
+					1.0f , 1.0f,  0.0f, 1.0f, //VAb6		
+
+					//Cara Derecha Azul
+					  0.0f , 0.0f,  1.0f, 1.0f, //VDer1
+					  0.0f , 0.0f,  1.0f, 1.0f, //VDer2
+					  0.0f , 0.0f,  1.0f, 1.0f, //VDer3
+					  0.0f , 0.0f,  1.0f, 1.0f, //VDer4
+					  0.0f , 0.0f,  1.0f, 1.0f, //VDer5
+					  0.0f , 0.0f,  1.0f, 1.0f, //VDer6		
+
+					  //Cara Izquierda Verde
+						0.0f , 1.0f,  0.0f, 1.0f, //VIz1
+						0.0f , 1.0f,  0.0f, 1.0f, //VIz2
+						0.0f , 1.0f,  0.0f, 1.0f, //VIz3
+						0.0f , 1.0f,  0.0f, 1.0f, //VIz4
+						0.0f , 1.0f,  0.0f, 1.0f, //VIz5
+						0.0f , 1.0f,  0.0f, 1.0f, //VIz6
 
 
 
@@ -316,18 +316,18 @@ void Application::keyCallback(int key, int scancode, int action, int mods)
 
 	if (key == GLFW_KEY_P && action == GLFW_PRESS)
 	{
-		if (currentProgram== 1)currentProgram = 2;
+		if (currentProgram == 1)currentProgram = 2;
 		else currentProgram = 1;
 	}
 
 	if (key == GLFW_KEY_G && action == GLFW_PRESS)
 	{
-		if (currentGeometry== 1) currentGeometry = 2;
+		if (currentGeometry == 1) currentGeometry = 2;
 		else currentGeometry = 1;
 	}
 
 
-	
+
 
 }
 
@@ -336,7 +336,7 @@ void Application::mouseCallback(double xpos, double ypos)
 	glfwGetCursorPos(window, &xpos, &ypos); //Obtiene la posición del mouse
 
 	//Convertimos los angulos
-	moveHorizontal = (xpos * 0.2) ;
+	moveHorizontal = (xpos * 0.2);
 	moveVertical = (ypos * 0.2);
 
 
@@ -348,8 +348,8 @@ void Application::mouseCallback(double xpos, double ypos)
 
 void Application::scrollCallback(double xoffset, double yoffset)
 {
-	zoom += yoffset/4.0f; //Se modifica la escala segun el scroll :)
-	
+	zoom += yoffset / 4.0f; //Se modifica la escala segun el scroll :)
+
 	if (zoom < minScale)
 	{
 		zoom = minScale;
@@ -358,7 +358,7 @@ void Application::scrollCallback(double xoffset, double yoffset)
 	{
 		zoom = maxScale;
 	}
-	glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3((1.0f,1.0f,1.0f)*zoom));
+	glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3((1.0f, 1.0f, 1.0f) * zoom));
 
 
 	//std::cout << "Xoffset: " << xoffset << " , " << "Yoffset:" << yoffset << std::endl;

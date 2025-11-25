@@ -131,13 +131,13 @@ public:
     GLFWwindow* window = nullptr;
 
     //Rotar 
-    float moveHorizontal; //cuanto rota en x
-    float moveVertical;  //cuanto rota en y
+    float moveHorizontal = 0.0f; //cuanto rota en x
+    float moveVertical = 0.0f;  //cuanto rota en y
 
     //Escalar
-    float zoom = 0.7f;
-    float minScale = 0.3f;
-    float maxScale = 7.0f;
+    float zoom = 1.0f;
+    float minScale = 0.5f;
+    float maxScale = 3.0f;
 
 
 

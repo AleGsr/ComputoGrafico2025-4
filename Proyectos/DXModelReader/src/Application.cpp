@@ -30,16 +30,14 @@ void Application::mouseCallback(double xpos, double ypos)
     moveHorizontal = (xpos * 0.2);
     moveVertical = (ypos * 0.2);
 
-
-    //glm::mat4 rotationX = glm::rotate(glm::mat4(1.0), glm::radians(moveVertical), glm::vec3(1.0f, 0.0f, 0.0f));
-    //glm::mat4 rotationY = glm::rotate(glm::mat4(1.0), glm::radians(moveHorizontal), glm::vec3(0.0f, 1.0f, 0.0f));
-    std::cout << "Xpos: "<< xpos << " , " << "YPos:" << ypos << std::endl;
+    //std::cout << "Xpos: "<< xpos << " , " << "YPos:" << ypos << std::endl;
 }
 
 
 void Application::scrollCallback(double xoffset, double yoffset)
 {
-    zoom += yoffset / 4.0f; //Se modifica la escala segun el scroll :)
+    const float sensibilidad = 0.30f;
+    zoom *= (1.0f + (float)yoffset * sensibilidad * 0.1f); //Se modifica la escala segun el scroll :)
 
     if (zoom < minScale)
     {
@@ -49,8 +47,8 @@ void Application::scrollCallback(double xoffset, double yoffset)
     {
         zoom = maxScale;
     }
-    //glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3((1.0f, 1.0f, 1.0f) * zoom));
-    std::cout << "Xoffset: " << xoffset << " , " << "Yoffset:" << yoffset << std::endl;
+
+    //std::cout << "zoom: " << zoom << std::endl;
 }
 
 void Application::setBlendState(D3D12_BLEND_DESC& d) {
@@ -447,8 +445,11 @@ void Application::setup() {
 }
 
 void Application::update() {
+
+    float distanciaCamara = 50.0f;
+
     sceneConstants.triangleAngle++;
-    sceneConstants.eye = XMVectorSet(0.0f, 0.0f, -3.0f, 1.0f); // Posición de la cámara
+    sceneConstants.eye = XMVectorSet(0.0f, 0.0f, -(distanciaCamara / zoom), 1.0f); // Posición de la cámara
     sceneConstants.center = XMVectorSet(0.0f, 0.0f, 0.0f, 1.0f);  // Punto al que mira
     sceneConstants.up = XMVectorSet(0.0f, 1.0f, 0.0f, 1.0f);    // Vector 'Up'
 
@@ -456,14 +457,19 @@ void Application::update() {
                                                                                                                                                                                                                                                                                                                                                                                                                                                         
 
     float aspect = static_cast<float>(WINDOW_WIDTH) / static_cast<float>(WINDOW_HEIGHT);
-	sceneConstants.projection = XMMatrixPerspectiveFovLH(XMConvertToRadians(45.0f), aspect, 0.1f, 1000.0f); // Proyección
+	sceneConstants.projection = XMMatrixPerspectiveFovLH(XMConvertToRadians(zoom), aspect, 0.1f, 1000.0f); // Proyección
 
 	// Modelo: rotación alrededor del eje Y sin angulo variable
-	XMVECTOR axisX = XMVectorSet(1.0f, 0.0f, 0.0f, 1.0f); // Eje X
+	XMVECTOR axisX = XMVectorSet(0.0f, 0.0f, 1.0f, 1.0f); // Eje X
 	XMVECTOR axisY = XMVectorSet(0.0f, 1.0f, 0.0f, 1.0f); // Eje Y
 	float angleRadX = XMConvertToRadians((float)(moveVertical)); // Ángulo en radianes
 	float angleRadY = XMConvertToRadians((float)(moveHorizontal)); // Ángulo en radianes
-    sceneConstants.model = XMMatrixRotationAxis(axisX,angleRadX) * XMMatrixRotationAxis(axisY, angleRadY);
+
+    XMMATRIX rotX = XMMatrixRotationAxis(axisX, angleRadX);
+    XMMATRIX rotY = XMMatrixRotationAxis(axisY, angleRadY);
+    XMMATRIX scale = XMMatrixScaling(zoom, zoom, zoom);
+
+    sceneConstants.model = XMMatrixRotationAxis(axisX,angleRadX) * XMMatrixRotationAxis(axisY, angleRadY) * XMMatrixScaling(zoom, zoom, zoom);
 
 
 
