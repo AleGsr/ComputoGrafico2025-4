@@ -50,8 +50,6 @@ void Application::scrollCallback(double xoffset, double yoffset)
         zoom = maxScale;
     }
     //glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3((1.0f, 1.0f, 1.0f) * zoom));
-
-
     std::cout << "Xoffset: " << xoffset << " , " << "Yoffset:" << yoffset << std::endl;
 }
 
@@ -461,9 +459,10 @@ void Application::update() {
 	sceneConstants.projection = XMMatrixPerspectiveFovLH(XMConvertToRadians(45.0f), aspect, 0.1f, 1000.0f); // Proyección
 
 	// Modelo: rotación alrededor del eje Y sin angulo variable
-	XMVECTOR axis = XMVectorSet(0.0f, 1.0f, 0.0f, 1.0f); // Eje Y
+	XMVECTOR axisY = XMVectorSet(0.0f, 1.0f, 0.0f, 1.0f); // Eje Y
+	XMVECTOR axisX = XMVectorSet(1.0f, 0.0f, 0.0f, 1.0f); // Eje X
 	float angleRad = XMConvertToRadians((float)(sceneConstants.triangleAngle % 360)); // Ángulo en radianes
-    sceneConstants.model = XMMatrixRotationAxis(axis,angleRad) * XMConvertToRadians(sceneConstants.triangleAngle);
+    sceneConstants.model = XMMatrixRotationAxis(axisY,angleRad) * XMConvertToRadians(sceneConstants.triangleAngle);
 
     memcpy(mappedMemory, &sceneConstants, sizeof(SceneConstants));// Sizeof es la cantidad de bits a copiar
 
