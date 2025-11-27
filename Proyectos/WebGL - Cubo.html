@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>WebGL Hello Triangle</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #333;
+        }
+
+        canvas {
+            border: 1px solid #000;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="glcanvas" width="640" height="480">
+        Tu navegador no soporta el elemento HTML5 canvas.
+    </canvas>
+
+    <script id="vertex-shader-2d" type="notjs">
+        attribute vec4 a_position;
+        attribute vec4 a_color;
+        varying lowp vec4 vColor;
+
+        void main() {
+            vColor = a_color;
+            gl_Position = a_position; //Siempre debe ser la ultima linea
+        }
+    </script>
+
+    <script id="fragment-shader-2d" type="notjs">
+        precision mediump float;
+        varying lowp vec4 vColor;
+
+        void main() {
+            // Triángulo Rojo
+            //gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+            gl_FragColor = vColor;
+        }
+    </script>
+
+
+    <script type="text/javascript">
+        //https://webglfundamentals.org/webgl/lessons/
+        //https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Tutorial
+
+        var shaderProgram ;
+        const canvas = document.getElementById('glcanvas');
+        const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+
+        // 1. Shaders GLSL (Lenguaje de Shading de Gráficos)
+        // El sombreador de vértices (Vertex Shader) procesa las posiciones de los vértices.
+        //const vsSource = `
+        //    attribute vec4 a_position;
+        //    void main() {
+        //        // gl_Position es una variable especial que almacena la posición final del vértice
+        //        gl_Position = a_position;
+        //    }
+        //`;
+        //
+        //// El sombreador de fragmentos (Fragment Shader) determina el color de cada píxel.
+        //const fsSource = `
+        //    void main() {
+        //        // gl_FragColor es una variable especial que almacena el color final del fragmento (píxel)
+        //        // Color RGB(1.0, 0.0, 0.0) es Rojo. El 1.0 final es el valor alfa (opacidad).
+        //        gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+        //    }
+        //`;
+
+        // Dibuja la escena
+        function drawScene(gl, vertexCount) {
+            gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+
+            // Limpiar el canvas (fondo azul oscuro)
+            gl.clearColor(0.0, 0.0, 0.4, 1.0);
+            gl.clear(gl.COLOR_BUFFER_BIT);
+
+            // Comando de dibujo final: Dibuja 3 vértices como un triángulo.
+            gl.drawArrays(gl.TRIANGLES, 0, vertexCount); //Esta es la que se debe ejecutar muchas veces para hacer los cubos, solo varía la posicion
+            //Pasarle nuevas variable uniform para que grafique en otra posicion
+            //Las posiciones son matrices de traslacion se ponen en el for cuando se lee el array, sumandole 2 ya que es lo que mide el cubo 
+        }
+
+        // Compila un shader (vértices o fragmentos)
+        function loadShader(gl, type, source) {
+            const shader = gl.createShader(type);
+            gl.shaderSource(shader, source);
+            gl.compileShader(shader);
+
+            if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+                console.error('Error al compilar el shader:', gl.getShaderInfoLog(shader));
+                gl.deleteShader(shader);
+                return null;
+            }
+
+            return shader;
+        }
+
+        function getShaderSource(id) {
+            const shaderScript = document.getElementById(id);
+
+            if (!shaderScript) {
+                throw new Error(`No se encontró el elemento script con ID: ${id}`);
+            }
+
+            // El contenido del script se encuentra en la propiedad textContent
+            return shaderScript.textContent.trim();
+        }
+
+        // Crea el programa de sombreado combinando los shaders
+        function initShaderProgram(gl, vsSource, fsSource) {
+            const vertexShader = loadShader(gl, gl.VERTEX_SHADER, vsSource);
+            const fragmentShader = loadShader(gl, gl.FRAGMENT_SHADER, fsSource);
+
+            if (!vertexShader || !fragmentShader)
+                return null;
+
+            shaderProgram = gl.createProgram();
+            gl.attachShader(shaderProgram, vertexShader);
+            gl.attachShader(shaderProgram, fragmentShader);
+            gl.linkProgram(shaderProgram);
+
+            if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
+                console.error('No se pudo inicializar el shader:', gl.getProgramInfoLog(shaderProgram));
+                return null;
+            }
+
+            //return shaderProgram;
+        }
+
+        function setUpPosition()
+        {
+            // 3. Crear Geometría (Datos del Triángulo)
+            const positionBuffer = gl.createBuffer();
+            gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+
+            // Coordenadas en espacio de recorte (clip space): de -1.0 a +1.0
+            const positions = new Float32Array([
+
+                //VERTICES
+                //  X     Y     Z      W
+
+                //Cara Frontal
+                -1.0, -1.0, 1.0, 1.0, //VFrontal 1
+                -1.0, 1.0, 1.0, 1.0, //VFrontal 2
+                1.0, -1.0, 1.0, 1.0, //VFrontal 3
+                1.0, 1.0, 1.0, 1.0, //VFrontal 4
+                -1.0, 1.0, 1.0, 1.0, //VFrontal 5
+                1.0, -1.0, 1.0, 1.0, //VFrontal 6
+
+                //Cara Atras
+                -1.0, -1.0, -1.0, 1.0,  //VAtras 1
+                -1.0, 1.0, -1.0, 1.0,  //VAtras 2
+                1.0, -1.0, -1.0, 1.0,  //VAtras 3
+                1.0, 1.0, -1.0, 1.0,  //VAtras 4
+                -1.0, 1.0, -1.0, 1.0,  //VAtras 5
+                1.0, -1.0, -1.0, 1.0,  //VAtras 6
+
+                //Cara Arriba
+                -1.0, 1.0, 1.0, 1.0, //VArriba 1
+                -1.0, 1.0, -1.0, 1.0, //VArriba 2
+                1.0, 1.0, 1.0, 1.0, //VArriba 3
+                1.0, 1.0, -1.0, 1.0, //VArriba 4
+                -1.0, 1.0, -1.0, 1.0, //VArriba 5
+                1.0, 1.0, 1.0, 1.0, //VArriba 6
+
+                //Cara Abajo
+                -1.0, -1.0, 1.0, 1.0, //VAbajo 1
+                -1.0, -1.0, -1.0, 1.0, //VAbajo 2
+                1.0, -1.0, 1.0, 1.0, //VAbajo 3
+                1.0, -1.0, -1.0, 1.0, //VAbajo 4
+                -1.0, -1.0, -1.0, 1.0, //VAbajo 5
+                1.0, -1.0, 1.0, 1.0, //VAbajo 6
+
+                //Cara Derecha
+                1.0, -1.0, 1.0, 1.0, //VDerecha 1
+                1.0, 1.0, 1.0, 1.0, //VDerecha 2
+                1.0, -1.0, -1.0, 1.0, //VDerecha 3
+                1.0, 1.0, -1.0, 1.0, //VDerecha 4
+                1.0, 1.0, 1.0, 1.0, //VDerecha 5
+                1.0, -1.0, -1.0, 1.0, //VDerecha 3
+
+                //Cara Izquierda
+                -1.0, -1.0, 1.0, 1.0, //VIzquierda 1
+                -1.0, 1.0, 1.0, 1.0, //VIzquierda 2
+                -1.0, -1.0, -1.0, 1.0, //VIzquierda 3
+                -1.0, 1.0, -1.0, 1.0, //VIzquierda 4
+                -1.0, 1.0, 1.0, 1.0, //VIzquierda 5
+                -1.0, -1.0, -1.0, 1.0 //VIzquierda 6
+            ]);
+
+            // Pasar los datos de posición a la GPU
+            gl.bufferData(gl.ARRAY_BUFFER, positions, gl.STATIC_DRAW);
+
+            // 4. Conectar Geometría al Atributo del Shader
+            const positionLocation = gl.getAttribLocation(shaderProgram, 'a_position');
+
+            // Habilitar el atributo
+            gl.enableVertexAttribArray(positionLocation);
+
+            // Especificar cómo la GPU debe leer los datos del buffer
+            gl.vertexAttribPointer(
+                positionLocation, // Localización del atributo
+                4,                // Número de componentes por vértice (x, y, z, w)
+                gl.FLOAT,         // Tipo de datos en el buffer
+                false,            // Normalizar datos (no aplicable aquí)
+                0,                // Stride (paso) - 0 significa que los datos están densamente empacados
+                0                 // Offset (desplazamiento) - Dónde comenzar
+            );
+        }
+
+        function setUpColor()
+        {
+            // 3. Crear Geometría (Datos del Triángulo)
+            const colorBuffer = gl.createBuffer();
+            gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
+
+            // Coordenadas en espacio de recorte (clip space): de -1.0 a +1.0
+            const colors = new Float32Array([
+
+                //COLORES
+                // R      G      B     A
+
+                //Cara Frontal Rojo
+                1.0, 0.0, 0.0, 1.0, //VF1
+                1.0, 0.0, 0.0, 1.0, //VF2
+                1.0, 0.0, 0.0, 1.0, //VF3
+                1.0, 0.0, 0.0, 1.0, //VF4
+                1.0, 0.0, 0.0, 1.0, //VF5
+                1.0, 0.0, 0.0, 1.0, //VF6		
+
+                //Cara Atras Naranja/Morado
+                1.0, 0.0, 1.0, 1.0, //VAt1
+                1.0, 0.0, 1.0, 1.0, //VAt2
+                1.0, 0.0, 1.0, 1.0, //VAt3
+                1.0, 0.0, 1.0, 1.0, //VAt4
+                1.0, 0.0, 1.0, 1.0, //VAt5
+                1.0, 0.0, 1.0, 1.0, //VAt6
+
+                //Cara Arriba Blanco
+                0.0, 1.0, 1.0, 1.0, //VArr1
+                0.0, 1.0, 1.0, 1.0, //VArr2
+                0.0, 1.0, 1.0, 1.0, //VArr3
+                0.0, 1.0, 1.0, 1.0, //VArr4
+                0.0, 1.0, 1.0, 1.0, //VArr5
+                0.0, 1.0, 1.0, 1.0, //VArr6		
+
+                //Cara Abajo Amarillo
+                1.0, 1.0, 0.0, 1.0, //VAb1
+                1.0, 1.0, 0.0, 1.0, //VAb2
+                1.0, 1.0, 0.0, 1.0, //VAb3
+                1.0, 1.0, 0.0, 1.0, //VAb4
+                1.0, 1.0, 0.0, 1.0, //VAb5
+                1.0, 1.0, 0.0, 1.0, //VAb6		
+
+                //Cara Derecha Azul
+                0.0, 0.0, 1.0, 1.0, //VDer1
+                0.0, 0.0, 1.0, 1.0, //VDer2
+                0.0, 0.0, 1.0, 1.0, //VDer3
+                0.0, 0.0, 1.0, 1.0, //VDer4
+                0.0, 0.0, 1.0, 1.0, //VDer5
+                0.0, 0.0, 1.0, 1.0, //VDer6		
+
+                //Cara Izquierda Verde
+                0.0, 1.0, 0.0, 1.0, //VIz1
+                0.0, 1.0, 0.0, 1.0, //VIz2
+                0.0, 1.0, 0.0, 1.0, //VIz3
+                0.0, 1.0, 0.0, 1.0, //VIz4
+                0.0, 1.0, 0.0, 1.0, //VIz5
+                0.0, 1.0, 0.0, 1.0 //VIz6
+
+
+
+            ]);
+
+            // Pasar los datos de posición a la GPU
+            gl.bufferData(gl.ARRAY_BUFFER, colors, gl.STATIC_DRAW);
+
+            // 4. Conectar Geometría al Atributo del Shader
+            const colorLocation = gl.getAttribLocation(shaderProgram, 'a_color');
+
+            // Habilitar el atributo
+            gl.enableVertexAttribArray(colorLocation);
+
+            // Especificar cómo la GPU debe leer los datos del buffer
+            gl.vertexAttribPointer(
+                colorLocation, // Localización del atributo
+                4,                // Número de componentes por vértice (x, y, z, w)
+                gl.FLOAT,         // Tipo de datos en el buffer
+                false,            // Normalizar datos (no aplicable aquí)
+                0,                // Stride (paso) - 0 significa que los datos están densamente empacados
+                0                 // Offset (desplazamiento) - Dónde comenzar
+            );
+        }
+
+        function setUpShaders()
+        {
+
+            // 2. Inicializar Shaders
+            const vertexShader = getShaderSource('vertex-shader-2d')
+            const fragmentShader = getShaderSource('fragment-shader-2d')
+
+             initShaderProgram(gl, vertexShader, fragmentShader);
+
+            if (!shaderProgram) {
+                alert('No se pudo inicializar el shader program.');
+            }
+
+            // Usar el programa recién creado
+            gl.useProgram(shaderProgram);
+        }
+
+        function setUp()
+        {
+            setUpShaders();
+            setUpPosition();
+            setUpColor();
+
+            /*glEnable(GL_DEPTH_TEST);*/
+        }
+
+        function draw()
+        {
+            drawScene(gl, 36);
+        }
+
+
+        function main() {
+
+            if (!gl) {
+                alert('No se pudo inicializar WebGL. Tu navegador podría no soportarlo.');
+                return;
+            }
+
+           
+            setUp();
+            draw();
+        }
+
+        // Ejecutar la función principal al cargar la página
+        window.onload = main;
+    </script>
+</body>
+</html>
