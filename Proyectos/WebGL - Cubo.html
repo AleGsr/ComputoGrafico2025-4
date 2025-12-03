@@ -635,6 +635,32 @@
         );
         }
 
+        //Creacion de laberinto
+        function setUpMaze()
+        {
+           const laberinto = new Float32Array
+           ([
+                [1,1,1,1,1,1,1,1,0,1],
+                [1,0,0,1,1,0,0,0,0,1],
+                [1,1,0,0,1,0,1,1,1,1],
+                [1,1,1,0,0,0,1,0,0,1],
+                [1,1,1,0,1,1,0,1,0,1],
+                [1,0,0,0,0,0,0,0,0,1],
+                [1,0,1,1,0,1,0,1,1,1],
+                [1,0,0,1,1,1,1,0,0,1],
+                [1,1,0,0,0,0,0,0,1,1],
+                [1,1,1,1,0,0,1,1,1,1]
+           ]);
+        }
+      
+        function drawMaze()
+        {
+            for()
+        }
+
+
+
+
         function setUpShaders()
         {
 
@@ -682,12 +708,6 @@
         // Ejecutar la función principal al cargar la página
         window.onload = main;
     </script>
-
-    //Camara con perspectiva del cubo
-    const laberinto = [
-
-    ]
-
 
 </body>
 </html>
