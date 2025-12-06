@@ -26,9 +26,11 @@
     <script id="vertex-shader-2d" type="notjs">
         attribute vec4 a_position;
         attribute vec4 a_color;
+
         uniform mat4 u_view;
         uniform mat4 u_projection;
         uniform mat4 u_model;
+
         varying lowp vec4 vColor;
 
 
@@ -390,32 +392,49 @@
         //https://webglfundamentals.org/webgl/lessons/
         //https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Tutorial
 
+
+        ///////////////////////////////////////////////////////////////////////////
+        //Proyecto de Alejandra Gabriela Sandoval Ruíz - 15404  - GPD0 724
+        //Computación Gráfica
+
+        //-----Laberinto en WebGL-----
+
+
+        //VARIABLES GLOBALES
+
         var shaderProgram;
         const canvas = document.getElementById('glcanvas');
         const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
 
-        var view;
-        var projection;
-        var model;
+        //Variables de locacion
+        var u_view_location;
+        var u_projection_location;
+        var u_model_location;
 
-        // 1. Shaders GLSL (Lenguaje de Shading de Gráficos)
-        // El sombreador de vértices (Vertex Shader) procesa las posiciones de los vértices.
-        //const vsSource = `
-        //    attribute vec4 a_position;
-        //    void main() {
-        //        // gl_Position es una variable especial que almacena la posición final del vértice
-        //        gl_Position = a_position;
-        //    }
-        //`;
-        //
-        //// El sombreador de fragmentos (Fragment Shader) determina el color de cada píxel.
-        //const fsSource = `
-        //    void main() {
-        //        // gl_FragColor es una variable especial que almacena el color final del fragmento (píxel)
-        //        // Color RGB(1.0, 0.0, 0.0) es Rojo. El 1.0 final es el valor alfa (opacidad).
-        //        gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
-        //    }
-        //`;
+        //Variables de matrices
+        var viewMatrix;
+        var projectionMatrix;
+
+        //Laberinto
+        const tamañoCubo = 2;
+        const laberintoMapa = [
+          [1, 1, 1, 1, 1, 1, 1, 1, 0, 1],
+          [1, 0, 0, 1, 1, 0, 0, 0, 0, 1],
+          [1, 1, 0, 0, 1, 0, 1, 1, 1, 1],
+          [1, 1, 1, 0, 0, 0, 1, 0, 0, 1],
+          [1, 1, 1, 0, 1, 1, 0, 1, 0, 1],
+          [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+          [1, 0, 1, 1, 0, 1, 0, 1, 1, 1],
+          [1, 0, 0, 1, 1, 1, 1, 0, 0, 1],
+          [1, 1, 0, 0, 0, 0, 0, 0, 1, 1],
+          [1, 1, 1, 1, 0, 0, 1, 1, 1, 1]
+        ];
+        const rowsLaberinto = laberintoMapa.length;
+        const colsLaberinto = laberintoMapa[0].length;
+
+
+        //////////////////////////////////////////////////////
+
 
         // Dibuja la escena
         function drawScene(gl, vertexCount) {
@@ -423,12 +442,18 @@
 
             // Limpiar el canvas (fondo azul oscuro)
             gl.clearColor(0.0, 0.0, 0.4, 1.0);
-            gl.clear(gl.COLOR_BUFFER_BIT);
+            gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
             // Comando de dibujo final: Dibuja 3 vértices como un triángulo.
-            gl.drawArrays(gl.TRIANGLES, 0, vertexCount); //Esta es la que se debe ejecutar muchas veces para hacer los cubos, solo varía la posicion
+            //gl.drawArrays(gl.TRIANGLES, 0, vertexCount); //Esta es la que se debe ejecutar muchas veces para hacer los cubos, solo varía la posicion
             //Pasarle nuevas variable uniform para que grafique en otra posicion
             //Las posiciones son matrices de traslacion se ponen en el for cuando se lee el array, sumandole 2 ya que es lo que mide el cubo
+
+            gl.uniformMatrix4fv(u_projection_location, false, projectionMatrix);
+            gl.uniformMatrix4fv(u_view_location, false, viewMatrix);
+
+            drawLaberinto(laberintoMapa, tamañoCubo);
+            
         }
 
         // Compila un shader (vértices o fragmentos)
@@ -445,6 +470,7 @@
 
             return shader;
         }
+
 
         function getShaderSource(id) {
             const shaderScript = document.getElementById(id);
@@ -569,7 +595,15 @@
                 //COLORES
                 // R      G      B     A
 
-                //Cara Frontal Rojo
+                //Cara Frontal Naranja/Morado
+                1.0, 0.0, 1.0, 1.0, //VAt1
+                1.0, 0.0, 1.0, 1.0, //VAt2
+                1.0, 0.0, 1.0, 1.0, //VAt3
+                1.0, 0.0, 1.0, 1.0, //VAt4
+                1.0, 0.0, 1.0, 1.0, //VAt5
+                1.0, 0.0, 1.0, 1.0, //VAt6
+
+                //Cara Atras Rojo
                 1.0, 0.0, 0.0, 1.0, //VF1
                 1.0, 0.0, 0.0, 1.0, //VF2
                 1.0, 0.0, 0.0, 1.0, //VF3
@@ -577,13 +611,6 @@
                 1.0, 0.0, 0.0, 1.0, //VF5
                 1.0, 0.0, 0.0, 1.0, //VF6
 
-                //Cara Atras Naranja/Morado
-                1.0, 0.0, 1.0, 1.0, //VAt1
-                1.0, 0.0, 1.0, 1.0, //VAt2
-                1.0, 0.0, 1.0, 1.0, //VAt3
-                1.0, 0.0, 1.0, 1.0, //VAt4
-                1.0, 0.0, 1.0, 1.0, //VAt5
-                1.0, 0.0, 1.0, 1.0, //VAt6
 
                 //Cara Arriba Blanco
                 0.0, 1.0, 1.0, 1.0, //VArr1
@@ -593,13 +620,14 @@
                 0.0, 1.0, 1.0, 1.0, //VArr5
                 0.0, 1.0, 1.0, 1.0, //VArr6
 
-                //Cara Abajo Amarillo
-                1.0, 1.0, 0.0, 1.0, //VAb1
-                1.0, 1.0, 0.0, 1.0, //VAb2
-                1.0, 1.0, 0.0, 1.0, //VAb3
-                1.0, 1.0, 0.0, 1.0, //VAb4
-                1.0, 1.0, 0.0, 1.0, //VAb5
-                1.0, 1.0, 0.0, 1.0, //VAb6
+                //Cara Abajo Verde
+                0.0, 1.0, 0.0, 1.0, //VIz1
+                0.0, 1.0, 0.0, 1.0, //VIz2
+                0.0, 1.0, 0.0, 1.0, //VIz3
+                0.0, 1.0, 0.0, 1.0, //VIz4
+                0.0, 1.0, 0.0, 1.0, //VIz5
+                0.0, 1.0, 0.0, 1.0, //VIz6
+
 
                 //Cara Derecha Azul
                 0.0, 0.0, 1.0, 1.0, //VDer1
@@ -609,13 +637,13 @@
                 0.0, 0.0, 1.0, 1.0, //VDer5
                 0.0, 0.0, 1.0, 1.0, //VDer6
 
-                //Cara Izquierda Verde
-                0.0, 1.0, 0.0, 1.0, //VIz1
-                0.0, 1.0, 0.0, 1.0, //VIz2
-                0.0, 1.0, 0.0, 1.0, //VIz3
-                0.0, 1.0, 0.0, 1.0, //VIz4
-                0.0, 1.0, 0.0, 1.0, //VIz5
-                0.0, 1.0, 0.0, 1.0 //VIz6
+                //Cara Izquierda Amarillo
+                1.0, 1.0, 0.0, 1.0, //VAb1
+                1.0, 1.0, 0.0, 1.0, //VAb2
+                1.0, 1.0, 0.0, 1.0, //VAb3
+                1.0, 1.0, 0.0, 1.0, //VAb4
+                1.0, 1.0, 0.0, 1.0, //VAb5
+                1.0, 1.0, 0.0, 1.0 //VAb6
 
 
 
@@ -642,23 +670,30 @@
         }
 
         //Creacion de laberinto
-        function setUpMaze() {
-            const laberinto = new Float32Array
-                ([
-                    [1, 1, 1, 1, 1, 1, 1, 1, 0, 1],
-                    [1, 0, 0, 1, 1, 0, 0, 0, 0, 1],
-                    [1, 1, 0, 0, 1, 0, 1, 1, 1, 1],
-                    [1, 1, 1, 0, 0, 0, 1, 0, 0, 1],
-                    [1, 1, 1, 0, 1, 1, 0, 1, 0, 1],
-                    [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-                    [1, 0, 1, 1, 0, 1, 0, 1, 1, 1],
-                    [1, 0, 0, 1, 1, 1, 1, 0, 0, 1],
-                    [1, 1, 0, 0, 0, 0, 0, 0, 1, 1],
-                    [1, 1, 1, 1, 0, 0, 1, 1, 1, 1]
-                ]);
-        }
+        function drawLaberinto(mapa, tamaño) {
+            const rows = rowsLaberinto;
+            const cols = colsLaberinto;
+            const offset = (tamaño / 2);
+            
+            for (let r = 0; r < rows; r++) {
+                for (let c = 0; c < cols; c++){
+                    if (mapa[r][c] === 1) {
+                        //Primero checamos la posicion de nuestros cubitos
+                        const XPos = (c - cols / 2 + 0.5) * tamaño;
+                        const YPos = 0;
+                        const ZPos = (r - rows / 2 + 0.5) * tamaño;
 
-        function drawMaze() {
+                        //Ocupamos traslación en la matriz model 
+                        let modelMatrix = m4.translation(XPos, YPos + offset, ZPos);
+
+                        //Nuestra matriz model la enviamos al GPU
+                        gl.uniformMatrix4fv(u_model_location, false, modelMatrix);
+
+                        //Dibujamos el cubito :3
+                        gl.drawArrays(gl.TRIANGLES,0,36);
+                    }
+                }
+            }                    
 
         }
 
@@ -683,10 +718,36 @@
             // Usar el programa recién creado
             gl.useProgram(shaderProgram);
 
-            //ID
-            view = gl.getUniformLocation(shaderProgram, "u_view");
-            projection = gl.getUniformLocation(shaderProgram, "u_projection");
-            model = gl.getUniformLocation(shaderProgram, "u_model");
+            //ID de las uniforms
+            u_view_location = gl.getUniformLocation(shaderProgram, "u_view");
+            u_projection_location = gl.getUniformLocation(shaderProgram, "u_projection");
+            u_model_location = gl.getUniformLocation(shaderProgram, "u_model");
+
+        }
+
+
+        function setUpCamara(){
+           //Matriz de proyeccion
+            const campoDeVision = 30 * Math.PI / 180; //El angulo de la camarita, se hace la operación para pasarla a radianes.
+            const aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
+            const cercaDeZ = 0.1; //Que tan cerca en el plano z
+            const lejosDeZ = 1000.0; //Que tan lejos en el plano z
+            projectionMatrix = m4.perspective(campoDeVision, aspect, cercaDeZ, lejosDeZ);
+
+
+            //Matriz de view
+            const centroDelLaberinto = [0, 0, 0]; // El punto central del laberinto.
+
+            // Checamos en que posicion de la camara se puede ver todo el laberinto
+            const eyePosition = [
+                (colsLaberinto * tamañoCubo) * 0, // Posición X 
+                (rowsLaberinto * tamañoCubo) * -1.7, // Posición Y 
+                (rowsLaberinto * tamañoCubo) * 1.2 // Posición Z 
+            ];
+            const target = centroDelLaberinto; // Punto al que mira la cámara
+            const up = [0, 1, 0]; 
+
+            viewMatrix = m4.lookAt(eyePosition, target, up);
 
         }
 
@@ -698,22 +759,14 @@
             setUpShaders();
             setUpPosition();
             setUpColor();
+            setUpCamara();
 
-            /*glEnable(GL_DEPTH_TEST);*/
+            gl.enable(gl.DEPTH_TEST); //Se habilita lo de la profundidad
+            gl.depthFunc(gl.LEQUAL); //Se dibujan primero los objetos cercanos
         }
 
         function draw() {
             drawScene(gl, 36);
-
-
-            var viewMatrix;
-            var projectionMatrix;
-            var modelMatrix;
-
-            gl.uniformMatrix4fv(view, false, viewMatrix);
-            gl.uniformMatrix4fv(projection, false, projectionMatrix);
-            gl.uniformMatrix4fv(model,false, modelMatrix);
-
 
         }
 
